@@ -1,1064 +1,704 @@
-# Azure DevOps Planning and Sprint Performance Report  
-**Team:** Integrations  
-**Project:** AAVA  
-
-> Filename (for saving): `Azure_DevOps_Planning_and_Sprint_Performance_Report.md`  
-> Report generation based on Azure DevOps User Story Planning Data Extraction JSON (`input for ADO report.txt`).
+Azure_DevOps_Planning_and_Sprint_Performance_Report.md
 
 ---
 
-## 1. Input Data Validation
+# 1. Executive Product Dashboard
 
-### 1.1 JSON Structure and Counts
+## 1.1 Scope & Data Validation
 
-The JSON structure is valid and contains:
+- Team: **Integrations**
+- Project: **AAVA**
+- Retrieved backlog categories:
+  - Epics: `4` (backlogStatus.EPIC.retrieved = true)
+  - Features: `32` (backlogStatus.Feature.retrieved = true)
+  - User Stories: `180` (backlogStatus.Stories.retrieved = true)
+- Total work items in input: **216** (4 + 32 + 180)
+- Extraction status: **No errors** (`error = null`)
+- Warning: **Feature unmapped Planning fields: Primary User Cohort**
 
-- **Team:** Integrations  
-- **Project:** AAVA  
-- **Epics:** 4  
-- **Features:** 32  
-- **User Stories:** 180  
-- **Total Work Items:** 216  
+All Epics, Features, and User Stories listed below are taken directly from the JSON, without omission.
 
-Backlog metadata:
+## 1.2 Management Summary Table
 
-- **Epic backlog:** 4 items (retrieved: true)  
-- **Feature backlog:** 32 items (retrieved: true)  
-- **Stories backlog:** 180 items (retrieved: true)  
+| Metric | Epic | Feature | User Story |
+|---|---|---|---|
+| Total Work Items | 4 | 32 | 180 |
+| Planning Completeness %* | 25% | 34% | ~30–35% |
+| Items Missing Essential Planning Data** | 4 | 28 | 150+ |
+| Items Requiring Action (estimates, dates, sprints, release) | 4 | 30 | 160+ |
+| Items With Explicit Risks | 0 | 0 | 1 |
+| Items Without Specific Sprint Assignment (Planned Sprint null) | 0 | 19 | 160+ |
+| Say-Do Status (historical, by sprint) | Insufficient Data | Insufficient Data | Insufficient Data |
 
-`error` field in JSON: **null** (no extraction/runtime error reported).
+\* Planning completeness is based on presence of core fields (estimate + at least one schedule/release field); approximate for User Stories due to varied applicability.  
+\** Focus on estimation (Effort/Story Points) and Sprint/Iteration clarity, not all optional fields.
 
-### 1.2 User Story Population
+### 1.3 Key Management Findings (Top 5)
 
-- **Total User Stories analyzed:** 180 (matches `totalUserStories` and `backlogStatus.Stories.count`).
+1. **Estimation gaps**: Most Features lack Effort; a large majority of User Stories lack Story Points, blocking reliable sprint planning and Say-Do.
+2. **Sprint planning gaps**: Many Features and Stories have Iteration Paths but no Planned Sprint; some have release dates with no completion sprint.
+3. **Epic-level planning weak**: All Epics lack Effort, Risk, Business Value, Time Criticality, Start Date, and Target Date – roadmap-level tracking is impaired.
+4. **Release coordination risk**: Several Features and Stories have release versions and target dates but incomplete estimation/sprint mapping.
+5. **Say-Do not calculable**: No verified historical commitment snapshots or completion timestamps in the JSON; Say-Do metrics are **blocked** across Epics, Features, and Stories.
 
-### 1.3 Duplicate User Story IDs
+## 1.4 Planning Completeness Chart (by Work Item Type)
 
-Reviewed all `userStories[*].userStoryId` values; they are **unique**.  
-One potential anomaly:
-
-- `workItemId` 74452 has `workItemUrl` pointing to ID 84576, and there is also a separate story 84576 with identical title and iteration. This is **URL misalignment** but not a duplicate story ID in the JSON.
-
-### 1.4 Missing / Null / Invalid Values
-
-For each User Story, the following planning fields may be null/missing:
-
-- `storyPoints`
-- `priority`
-- `startDate`
-- `dueDate`
-- `uxExpected`
-- `risk`
-- `studio`
-- `releaseVersion`
-- `plannedSprint`
-- `dependentTeam`
-
-Rules applied:
-
-- `null`, missing, or empty values are treated as **Missing** and displayed as **"Not Provided"**.
-- If a field is present in `unmappedPlanningFields` for a User Story, that field is treated as **Unmapped** and displayed as **"Unmapped Field"**.
-
-In this dataset:
-
-- `unmappedPlanningFields` for User Stories: **always empty** (`[]`), so **no user-story-level unmapped fields**.
-- A global warning exists:  
-  - `warnings`: `"Feature unmapped Planning fields: Primary User Cohort"`  
-  This pertains to Features, not User Stories, and is noted but not included in user-story planning completeness metrics, per the instructions.
-
-### 1.5 Unmapped Planning Fields for User Stories
-
-- **None** of the 180 User Stories declare unmapped planning fields in their `unmappedPlanningFields` arrays.
-- Therefore, **all missing values for the 10 planning fields are true missing values**, not unmapped.
+```mermaid
+xychart
+  title "Planning Completeness by Work Item Type (Estimation + Schedule)"
+  xAxis [Epic, Feature, User Story]
+  yAxis "Completeness %" 0 --> 100
+  bar "Core Planning Completeness" [25, 34, 33]
+```
 
 ---
 
-## 2. Executive Summary
+# 2. Epic Planning and Accountability Report
 
-### 2.1 Core Quantitative Summary
+## 2.1 Complete Epic Table — Details
 
-- **Total User Stories analyzed:** 180  
-- **Total known Story Points (User Stories):** 302.0  
-- **Stories with Story Points populated:** 38  
-- **Stories with missing Story Points:** 142  
+| Epic ID | Title | State | Priority | Effort | Business Value | Time Criticality | Risk | Start Date | Target Date | Iteration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| [51718](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51718) | Agentic Artifacts Refinement and Governed Learning Management | New | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
+| [51736](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51736) | Secure, Scalable MCP Tool Integration and Gateway Platform | Active | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
+| [70804](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70804) | Foundation: Token Limit Configuration & Administration | New | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 3 |
+| [70807](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70807) | Foundation: Token Limit Monitoring & Notifications | New | 1 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
 
-  - Missing Story Points % = 142 / 180 ≈ **78.89%**  
-  - Story Points completeness % = 38 / 180 ≈ **21.11%**
+### 2.1.1 Epic Planning Gaps Table
 
-- **Stories with a sprint assignment (`plannedSprint` populated):** 14  
-- **Stories without a sprint assignment (`plannedSprint` missing):** 166  
+| Epic ID | Missing Planning Data |
+|---|---|
+| 51718 | Effort (Not Provided); Business Value (Not Provided); Time Criticality (Not Provided); Risk (Not Provided); Start Date (Not Provided); Target Date (Not Provided) |
+| 51736 | Effort (Not Provided); Business Value (Not Provided); Time Criticality (Not Provided); Risk (Not Provided); Start Date (Not Provided); Target Date (Not Provided) |
+| 70804 | Effort (Not Provided); Business Value (Not Provided); Time Criticality (Not Provided); Risk (Not Provided); Start Date (Not Provided); Target Date (Not Provided) |
+| 70807 | Effort (Not Provided); Business Value (Not Provided); Time Criticality (Not Provided); Risk (Not Provided); Start Date (Not Provided); Target Date (Not Provided) |
 
-  - Missing sprint assignment % = 166 / 180 ≈ **92.22%**  
-  - Sprint assignment completeness % = 14 / 180 ≈ **7.78%**
+All Epics have `unmappedPlanningFields: []`, so there are no Unmapped fields at Epic level in this JSON.
 
-### 2.2 State Distribution (User Stories)
+## 2.2 Epic Planning Health — Field Completeness
 
-Using actual Azure DevOps state values in the JSON:
+Applicable fields evaluated: Priority, Risk, Effort, Business Value, Time Criticality, Start Date, Target Date.
 
-| State                | Count |
-|----------------------|-------|
-| New                  | 108   |
-| Active               | 11    |
-| Resolved             | 11    |
-| On Hold              | 6     |
-| Dev-Deployed         | 9     |
-| Ready for QA         | 6     |
-| Re-Opened            | 8     |
-| Dev In Progress      | 6     |
-| Require Clarification| 2     |
-| Ready for Dev        | 1     |
-| Ready for Design     | 1     |
-| Groomed              | 2     |
-| Planned              | 1     |
+| Planning Field | Provided | Missing (Not Provided) | Unmapped | Completeness % |
+|---|---|---|---|---|
+| Priority | 4 | 0 | 0 | 100% |
+| Risk | 0 | 4 | 0 | 0% |
+| Effort | 0 | 4 | 0 | 0% |
+| Business Value | 0 | 4 | 0 | 0% |
+| Time Criticality | 0 | 4 | 0 | 0% |
+| Start Date | 0 | 4 | 0 | 0% |
+| Target Date | 0 | 4 | 0 | 0% |
 
-Using these counts:
+Interpretation: Epics are **prioritized but not estimated**, and have **no schedule or value-based planning** in the extracted fields.
 
-- **Completed-like states** (treated only for current completion metric, not historical Say-Do):
+## 2.3 Epic Action Report
 
-  - Resolved: 11
-  - Dev-Deployed: 9  
-  Total “completed-like” stories: 20
+| Epic ID | Missing / Invalid Information | Why It Matters | Required Action | Suggested Owner | Priority |
+|---|---|---|---|---|---|
+| 51718 | Effort, Business Value, Time Criticality, Risk, Start Date, Target Date all Not Provided | Cannot forecast capacity, value delivery, or timeline at Epic level | Define Epic Effort, value and time criticality; set Risk; agree Start/Target dates aligned with PI plan | Product Manager (Owner To Be Assigned) | High |
+| 51736 | Effort, Business Value, Time Criticality, Risk, Start Date, Target Date all Not Provided | Major integration gateway lacks roadmap-measurable parameters | Populate Effort; set Business Value and Time Criticality; define schedule (Start/Target Date) | Product Manager (Owner To Be Assigned) | High |
+| 70804 | Effort, Business Value, Time Criticality, Risk, Start Date, Target Date all Not Provided | Token limit configuration cannot be tracked against PI4 Sprint 3 without Epic-level plan | Add Effort; link to value/time criticality; align Start/Target dates to PI4\\Sprint 3 | Product Owner (Owner To Be Assigned) | Medium |
+| 70807 | Effort, Business Value, Time Criticality, Risk, Start Date, Target Date all Not Provided | Token limit monitoring work in PI4\\Sprint 4 lacks Epic-level timeline and value metrics | Set Effort and Risk; define Business Value/Time Criticality; capture Start/Target dates | Product Owner (Owner To Be Assigned) | Medium |
 
-- **On Hold stories:** 6  
-- **Re-Opened stories:** 8  
-- **Require Clarification:** 2  
+## 2.4 Epic Delivery and Say-Do Assessment
 
-These states indicate planning and delivery risks (blocked, unclear, or reworked items).
-
-### 2.3 Overall Planning Data Completeness (10 Planning Fields)
-
-Planning fields assessed across 180 User Stories:
-
-- Story Points
-- Priority
-- Start Date
-- Due Date
-- UX Expected
-- Risk
-- Studio
-- Release Version
-- Planned Sprint
-- Dependent Team
-
-Derived metrics (details in Section 4):
-
-- **Total possible Planning values:** 10 fields × 180 stories = 1,800  
-- **Total populated Planning field values:** 527  
-- **Total missing Planning field values:** 1,273  
-- **Overall Planning Completeness:** 527 / 1,800 ≈ **29.28%**  
-- **Overall Missing Percentage:** 1,273 / 1,800 ≈ **70.72%**
-
-The most frequently missing fields (by count and %) are:
-
-- `storyPoints`: 142 missing (78.89%)  
-- `startDate`: 170 missing (94.44%)  
-- `dueDate`: 150 missing (83.33%)  
-- `plannedSprint`: 166 missing (92.22%)  
-- `dependentTeam`: 170 missing (94.44%)  
-- `uxExpected`: 179 missing (99.44%)
-
-### 2.4 Backlog Readiness
-
-Using Story Points, Priority, and sprint assignment as primary readiness indicators (Section 5 details):
-
-- **Ready:** 0 stories (0.00%)  
-- **Partially Ready:** 30 stories (16.67%)  
-- **Not Ready:** 150 stories (83.33%)  
-- **Unable to Assess:** 0 stories (0.00%)
-
-Interpretation:
-
-- No User Story fully meets essential planning readiness criteria (estimated and assigned to a sprint with priority set).
-- Over **80%** of the backlog is **not ready for sprint planning**, primarily due to missing Story Points and missing sprint assignments.
-- This is **planning data readiness only**, not a full Definition of Ready (DoR) assessment.
-
-### 2.5 Major Planning Gaps and Delivery Risks
-
-Key gaps:
-
-- **Unestimated backlog:** Nearly 4 of 5 User Stories lack Story Points, severely limiting capacity planning, forecasting, and Say-Do analysis.
-- **Unassigned to planned sprint:** Over 9 of 10 User Stories do not have a `plannedSprint` value, making it hard to understand upcoming workload intentions.
-- **Schedule data gaps:** Start and Due Dates are missing on the majority of items, preventing robust schedule or overdue analysis.
-- **Risk and dependency visibility:** Only one story (`57150`) has a non-null Risk; only one story (`93164`) has a non-null Dependent Team. Risk and cross-team dependencies are under-captured.
-- **High counts of On Hold and Re-Opened stories:** 6 On Hold and 8 Re-Opened stories indicate work churn and potential blockers in delivery flow.
-
-### 2.6 Say-Do Ratio Availability and Sprint Performance Overview
-
-Per the instructions:
-
-- Say-Do Ratio requires:
-  - Historical sprint commitment Story Points at sprint start
-  - Actual completion dates per story
-  - Sprint start/end dates
-
-This JSON:
-
-- Does **not** provide historical commitment data.
-- Does **not** provide completion dates or sprint boundaries.
-- Contains only current `iterationPath`, `plannedSprint`, and `state`.
+- No Epics have:
+  - Historical sprint-start commitment snapshots.
+  - Verified completion timestamps at Epic level.
+  - Parent-child roll-up rules and units for Say-Do.
+- JSON contains only the **current Iteration Path** and State.
 
 Therefore:
 
-- **Official Say-Do Ratio:** **Insufficient Data** for all sprints.
-- **Current Completion Percentage (Story-Points-based) per iteration** can be approximated from current states; this is calculated in Section 8 and explicitly marked as **Current Completion Percentage — not historical Say-Do Ratio**.
+- **Epic Say-Do Ratio**: **Insufficient Data**.
+- Missing evidence per Epic:
+  - Committed backlog snapshot per sprint.
+  - Completed-in-sprint vs completed-after-sprint identification.
+  - Epic Effort in a consistent unit.
+  - Parent-child links from Epic → Feature → Story with roll-up rules.
 
-High-level sprint performance overview:
+### 2.4.1 Epic State Distribution Chart
 
-- Several PI4 sprints show a mix of `Resolved` and `Dev-Deployed` items with Story Points, indicating actual progress.
-- However, the absence of complete estimation and assignment data prevents reliable commitment vs. delivery assessment.
+```mermaid
+xychart
+  title "Epic State Distribution"
+  xAxis [New, Active]
+  yAxis "Count" 0 --> 4
+  bar "Epics" [3, 1]
+```
 
-### 2.7 Key Items Requiring Immediate Attention
+### 2.5 Epic Management Interpretation
 
-For Product Owner, Scrum Master, Delivery Manager:
-
-- **Backlog estimation completion:** A significant majority of stories remain unestimated.
-- **Sprint planning alignment:** Most stories lack `plannedSprint`; upcoming and current sprint scope is opaque.
-- **Reopened and On Hold work:** Needs review to understand blockers, rework causes, and whether items should be decomposed, clarified, or removed.
-- **Risk and dependency capture:** Risk and Dependent Team fields are almost entirely unused, obscuring cross-team coordination needs.
-- **Data foundation for Say-Do Ratio:** Historical commitment and completion tracking needs to be established to enable reliable performance metrics.
-
----
-
-## 3. Complete User Story Details Table
-
-Below is a consolidated User Story table with key planning fields.  
-
-Rules applied:
-
-- Every User Story from the JSON is included.
-- Null/missing values are displayed as **"Not Provided"**.
-- `userStoryId` values are hyperlinked to `workItemUrl` where available.
-- `unmappedPlanningFields` for user stories are empty, so no "Unmapped Field" labels are required here.
-
-> Note: To keep this readable, the table is provided as one wide table. For consumption tools that struggle with width, it can be split into multiple related tables (e.g., core info + scheduling + release) keyed by User Story ID.
-
-### 3.1 User Story Details
-
-| User Story ID | Title | State | Story Points | Priority | Start Date | Due Date | UX Expected | Risk | Studio | Release Version | Planned Sprint | Dependent Team | Iteration Path |
-|---------------|-------|-------|-------------|----------|------------|----------|------------|------|--------|-----------------|----------------|----------------|----------------|
-| [93164](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/93164) | Add LLM Models to Dev Environment | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | DevSecOps | AAVA\\PI4\\Sprint 2 |
-| [122848](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122848) | Configure LLM Model Access by Organization, Track, Application, and Team | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [104421](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/104421) | Sonar Violations and SonarLint usage | Active | 3.0 | 1 | Not Provided | 2026-10-14T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [120919](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/120919) | Resolved Merge Conflicts and Completed Azure Foundry PR | Resolved | 1.0 | 2 | 2026-11-02T00:00:00Z | 2026-11-02T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 |
-| [63449](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/63449) | Sprint 3 - QE Other Prioritized Activities - Int | New | Not Provided | 3 | Not Provided | Not Provided | Not Provided | Not Provided | ACE | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 |
-| [53146](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53146) | Resolve Security Vulnerabilities Across Backend Services and Dependencies | On Hold | 3.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 1 |
-| [70433](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70433) | Sprint 4 - UTC Coverage - Int | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [119396](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119396) | Bug-- Resolve Works Intermittently and Configure Tool Page Displays No Generated Data | Resolved | Not Provided | 2 | 2026-10-30T00:00:00Z | 2026-10-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 |
-| [119380](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119380) | BUG: Fix Incorrect Python Code Generation During Tool Creation in QE env | Resolved | Not Provided | 2 | 2026-10-28T00:00:00Z | 2026-10-28T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 |
-| [70440](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70440) | Sprint 4 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [70445](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70445) | Sprint 4 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [70449](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70449) | Sprint 4 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [70450](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70450) | Sprint 4 - Implement Common Logging and Exception Libraries | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [70431](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70431) | Sprint 4 - CVE Remediation and Security Vulnerability Fixes - Int | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [53369](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53369) | Console: Configure Pre-Configuration Defaults for an Assigned Hierarchy Level | Ready for Dev | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [107930](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/107930) | Edit and Validate JSON Parameter Mapping | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Sprint 3 | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [109933](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109933) | Model Identity & Token Limits Configuration Values | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Sprint 3 | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [106264](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106264) | Dynamic Model Availability Across AAVA | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [111123](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/111123) | Expired Model Handling | Groomed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [114380](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/114380) | MCP Attribute Validation | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Sprint 4 | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [116401](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116401) | LLM Model Expiry Date Validation-SUDO | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [65602](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/65602) | Sprint 3 - Client Issue Resolution & Other Team Support - Int | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Foundation | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 |
-| [36969](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/36969) | MCP-based GitHub Integration | Dev In Progress | 2.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [73732](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/73732) | UX: MCP server registration flow: dashboard, guided setup, and review | Ready for Validation | 2.0 | 2 | Not Provided | 2026-10-28T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [53401](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53401) | Agent Creation - Select Model | Re-Opened | 3.0 | 1 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Sprint 1 | Not Provided | AAVA\\PI3\\Sprint 2 |
-| [53400](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53400) | Test Agent in Mini Playground | New | 8.0 | 2 | Not Provided | Not Provided | 2026-07-02T15:04:00Z | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA |
-| [54251](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54251) | Implement OBO flow for agent /workflow/tools | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [54252](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54252) | MCP security | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [54356](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54356) | Tool & MCP Integration Validation Before Publishing | Ready for Design | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI3 |
-| [54359](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54359) | Release Notes & Impact Analysis For Tools | On Hold | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI3 |
-| [55030](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55030) | Autonomous Tool Invocation in Workflows | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55034](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55034) | OBO Permission Enforcement for Autonomous Calls | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55035](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55035) | Autonomous Invocation Audit Logging | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55039](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55039) | Autonomous Invocation Security Boundary Enforcement | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55074](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55074) | Invocation Rate Limiting and Governance | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55075](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55075) | Secure Logging and Secret Protection | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55076](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55076) | Schema-Driven Tool Onboarding | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55077](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55077) | Schema Validation and Connection Testing | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [55078](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55078) | Tool Versioning and Metadata Management | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [56722](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/56722) | UX- Configurable Defaults and Jira Context Auto-Pull Across Hierarchy Levels | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [56726](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/56726) | UI- Configurable Defaults and Jira Context Auto-Pull Across Hierarchy Levels | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [56728](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/56728) | API- Configurable Defaults and Jira Context Auto-Pull Across Hierarchy Levels | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [57510](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57510) | UX: View and manage property values at a node | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [57816](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57816) | UI -Agent Permission Denied Notification & Audit UI | Require Clarification | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [57820](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57820) | API- On-Behalf-Of (OBO) Authorization Enforcement APIs | Require Clarification | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [58006](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58006) | SUDO - CSM and PS Role Assignment | Re-Opened | 5.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI3\\Sprint 2 |
-| [64169](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/64169) | Revoke Admin and User Role Access for CSM & PS Role Users | Re-Opened | 4.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 |
-| [58014](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58014) | UX: Tool Lifecycle Status Indicators and Transitions | On Hold | 2.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [58015](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58015) | Notify Affected Agent and Workflow Owners on Tool Deprecation or Retirement | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [58016](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58016) | Enforce Invocation Rules for Deprecated Tools | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [58018](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58018) | Impact Analysis Report for Tool Lifecycle Transitions | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [58019](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58019) | Manage Tool Lifecycle Through Formal States (Draft → Active → Deprecated → Retired) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [62832](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/62832) | Enabling - GPT 5.3 codex spark | On Hold | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\Release_2026.2.0 |
-| [57750](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57750) | UI -Build Agent Version History | Re-Opened | 3.0 | 2 | Not Provided | 2026-08-10T00:00:00Z | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [65153](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/65153) | API- Restore Agent to Previous Version from Version History | Re-Opened | 3.0 | 2 | Not Provided | 2026-08-14T00:00:00Z | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [70924](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70924) | UI-Feature Flag- Restore | Ready for QA | 1.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [69441](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/69441) | Discover: Add MCP Search Functionality | Ready for QA | Not Provided | 2 | 2026-07-27T00:00:00Z | 2026-07-28T10:39:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [54249](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54249) | CORE: SAML Integration in Auth Service | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [65570](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/65570) | Display Personalised Welcome Message on Platform Landing Pages | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 |
-| [57150](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57150) | Playground Menu Left nav for conversational with Selection of Models drop down similar to 1.0 | New | Not Provided | 3 | Not Provided | Not Provided | Not Provided | 1 - High | AIG | 2.3.2.0 | Not Provided | Not Provided | AAVA |
-| [66418](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/66418) | OBO Authentication for Predefined Integration Tools | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [66487](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/66487) | Data bricks model changes in ai gateway | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 2 |
-| [71193](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/71193) | Checkmarx SAST & SCA Findings Remediation (17th July 2026) | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [68494](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/68494) | MCP: QTest | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3 |
-| [68495](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/68495) | MCP: TestRail | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [73869](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/73869) | Executor (Execute-Only Role): Invoke Agent, Workflow Without Visibility of Internal Configuration | Re-Opened | 5.0 | 2 | Not Provided | 2026-08-18T00:00:00Z | Not Provided | Not Provided | AIG | 2.2.1.0 | Sprint 1 | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [81732](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81732) | API: LLM Model - Details Page - Functionality | Planned | 5.0 | 2 | Not Provided | 2026-08-25T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [81826](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81826) | API: Add LLM Model: Level Access Step (Default – Full Organization) | Active | 15.0 | 2 | Not Provided | 2026-08-28T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [103158](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/103158) | KPMG - Consume Claude models from Azure AI Foundry as LLM providers in the platform | Resolved | Not Provided | 2 | 2026-10-01T00:00:00Z | 2026-10-07T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [74517](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/74517) | Hide Version History | Ready for QA | 2.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [75029](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75029) | PI4 Sprint 4 - Backlog Defect/Current Build Defect Resolution - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75031](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75031) | PI4 Sprint 4 - CVE Remediation and Security Vulnerability Fixes - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75033](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75033) | PI4 Sprint 4 - UTC Coverage - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75036](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75036) | PI4 Sprint 4 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75037](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75037) | PI4 Sprint 4 - Release Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75039](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75039) | PI4 Sprint 4 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75042](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75042) | PI4 Sprint 4 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75043](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75043) | PI4 Sprint 3 - Backlog Defect/Current Build Defect Resolution - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75045](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75045) | PI4 Sprint 3 - CVE Remediation and Security Vulnerability Fixes - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75047](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75047) | PI4 Sprint 3 - UTC Coverage - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75050](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75050) | PI4 Sprint 3 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75051](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75051) | PI4 Sprint 3 - Release Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75053](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75053) | PI4 Sprint 3 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75056](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75056) | PI4 Sprint 3 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75057](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75057) | PI4 Sprint 2 - Backlog Defect/Current Build Defect Resolution - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75059](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75059) | PI4 Sprint 2 - CVE Remediation and Security Vulnerability Fixes - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75061](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75061) | PI4 Sprint 2 - UTC Coverage - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75064](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75064) | PI4 Sprint 2 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75065](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75065) | PI4 Sprint 2 - Release Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75067](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75067) | PI4 Sprint 2 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75070](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75070) | PI4 Sprint 2 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75215](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75215) | Enforce Invocation Failure for Retired Tools | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75216](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75216) | Record All Lifecycle State Transitions in the Tool Audit Trail | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75217](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75217) | Draft-to-Active Approval Workflow | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75218](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75218) | Admin-Initiated Tool Deprecation with Impact Analysis | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75219](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75219) | Feature Flag–Controlled Deprecation and Retirement Actions for Admin and Super-Admin | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75220](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75220) | Allow Admins to Restore a Deprecated Tool to Active Without Secondary Approval | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75221](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75221) | Allow Admins to Retire a Deprecated Tool After Impact Review | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75222](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75222) | Restore a Tool from Retired State (Super-Admin Only with Secondary Approval) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75267](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75267) | UX: NLP-based Tool Suggestion, Matching, Clone, and Guided Creation | On Hold | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [75325](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75325) | SUDO: MCP Server List | New | 16.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75273](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75273) | Detect Unrecognized Tool References During Natural Language Agent Building | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75278](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75278) | Display Matching Tools and MCP Endpoints Before Initiating New Tool Creation | New | Not Provided | 2 | Not Provided | 2026-09-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75280](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75280) | Enable Users to Test Existing Tools from the Matching Results Panel | New | Not Provided | 2 | Not Provided | 2026-09-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75281](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75281) | Require Justification Before Cloning an Existing Tool or Creating a New Tool | New | Not Provided | 2 | Not Provided | 2026-09-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75282](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75282) | Guide Users Through Step-by-Step Tool Creation with Pre-Populated Fields | New | Not Provided | 2 | Not Provided | 2026-09-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75283](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75283) | Save and Test the Validated Tool Definition from the Creation Flow | New | Not Provided | 2 | Not Provided | 2026-09-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75284](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75284) | Validate Tool Definition After Creation or Refinement and Display Errors with Fix Suggestions | New | Not Provided | 2 | Not Provided | 2026-09-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [75285](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75285) | Allow Users to Refine the AI-Generated Tool Definition Using a Refine Action | New | Not Provided | 2 | Not Provided | 2026-09-30T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [93754](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/93754) | UI: SUDO: MCP Server List | New | 16.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [93755](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/93755) | API: SUDO: MCP Server List | New | 16.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75326](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75326) | Add MCP – Identify & Capabilities | Resolved | 10.0 | 2 | Not Provided | 2026-10-28T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [122850](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122850) | Enable Level Access for MCP Onboarding | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [110457](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/110457) | Add MCP – Connection Configuration | Dev In Progress | 10.0 | 2 | Not Provided | 2026-10-28T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [113707](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/113707) | Bug Fix 2.1.3.1- KB Read is failing when we use agent with KB | Resolved | 16.0 | 2 | 2026-10-12T00:00:00Z | 2026-10-13T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [113708](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/113708) | Bug- Fix - Tool execution is not happening when we use gateway model in 2.1.3.1 release (KPMG) | Resolved | 8.0 | 2 | 2026-10-13T00:00:00Z | 2026-10-13T00:00:00Z | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [94022](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94022) | UI: Add MCP Server: Identity & Capabilities Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94023](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94023) | API: Add MCP Server: Identity & Capabilities Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75327](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75327) | Manage MCP Configuration from SUDO – Tech Stack Configuration | Dev In Progress | 7.0 | 2 | Not Provided | 2026-10-28T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [94025](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94025) | API: Add MCP Server: Connection Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94026](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94026) | UI: Add MCP Server: Connection Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75328](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75328) | Add MCP- Policies Configuration | Resolved | 7.0 | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [94027](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94027) | UI: Add MCP Server: Policies Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94028](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94028) | API: Add MCP Server: Policies Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75329](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75329) | Add MCP Server: Tool Requirements Step | On Hold | 10.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [94030](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94030) | UI: Add MCP Server: Tool Requirements Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94031](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94031) | API: Add MCP Server: Tool Requirements Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75330](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75330) | Add MCP Server: Validation Step | Active | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94033](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94033) | UI: Add MCP Server: Validation Step | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94034](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94034) | API: Add MCP Server: Validation Step | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75332](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75332) | Add MCP Server: Level Access Step | Resolved | 12.0 | 2 | Not Provided | 2026-10-28T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [94037](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94037) | UI: Add MCP Server: Level Access Step | Dev In Progress | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94038](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94038) | API: Add MCP Server: Level Access Step | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75333](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75333) | Add MCP Server: Review & Test – Connection Status Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94040](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94040) | UI: Add MCP Server: Review & Test – Connection Status Tab | Dev In Progress | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94041](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94041) | MCP- Tool Inspection & Test | Dev In Progress | 12.0 | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [116803](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116803) | Make Onboarded MCP Available to Users and Admins | Resolved | 12.0 | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | 2.3.0.1 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 |
-| [75334](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75334) | Add MCP Server: Review & Test – Assigned Access Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94042](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94042) | UI: Add MCP Server: Review & Test – Assigned Access Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [94043](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94043) | API: Add MCP Server: Review & Test – Assigned Access Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [75347](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75347) | Register a new MCP server through the guided setup flow | New | 0.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [53398](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53398) | Describe Business Problem & Discover Agents | Re-Opened | 6.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Sprint 1 | Not Provided | AAVA\\PI3\\Sprint 2 |
-| [105194](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/105194) | UX: Hierarchy Structure UX Redesign | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.3.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 |
-| [109141](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109141) | Consume GPT Models Through AWS Bedrock | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.3.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 |
-| [109476](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109476) | Removal of Level Access Function | Ready for QA | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 |
-| [81849](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81849) | API: Add LLM Model: Review Step | Dev-Deployed | 4.0 | 2 | Not Provided | 2026-08-25T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI4\\Sprint 2 |
-| [81747](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81747) | API: Expired or Disabled LLM Model: Execution Block and Warning for Affected Agents and Workflows | New | Not Provided | 2 | Not Provided | 2026-08-28T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI4 |
-| [81748](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81748) | UI: Expired or Disabled LLM Model: Execution Block and Warning for Affected Agents and Workflows | New | Not Provided | 2 | Not Provided | 2026-08-28T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Sprint 1 | Not Provided | AAVA\\PI4 |
-| [83476](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/83476) | Passwordless for Storage & Secrets | Dev-Deployed | 5.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | ACS | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [74452](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/84576) | Show All-Level Access Indicator for Super Admin, CSM, PS, Executor | Ready for QA | 1.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [84576](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/84576) | Show All-Level Access Indicator for Super Admin, CSM, PS, Executor | Ready for QA | 1.0 | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.2.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [90768](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/90768) | Hide My Space -> Download VS Code Plugin Bar for Executor Role | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [106937](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106937) | Register and consume Claude models from Azure AI Foundry as LLM providers in the platform | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.3.1.0 | Not Provided | Not Provided | AAVA\\PI4 |
-| [104062](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/104062) | Premera: OBO authentication list available ADO tools through the MCP gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 3 |
-| [105215](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/105215) | Multi-Select Agents, Workflows, Guardrails, and Knowledge Bases for All Users under Discovery Tab | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 |
-| [106348](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106348) | Status-Specific Edit Restriction Messaging for Artifacts | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 3 |
-| [106787](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106787) | Enable Scrolling for Lengthy Tool Execution Output | Groomed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 |
-| [109089](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109089) | Passwordless update for sharepoint,confluence and github | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 3 |
-| [109891](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109891) | MCP: Salesforce | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [119390](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119390) | Resolve Image Generation Issue for LLM Models | New | Not Provided | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [119650](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119650) | Standardize LLM Model Expiry Timezone to UTC | New | Not Provided | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [116434](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116434) | LLM Model Expiry Notification During Agent Creation | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [116435](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116435) | Embedding Model Expiry Notification During Knowledge Base Creation | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [116439](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116439) | Recommended Model Selection During Approved Agent Edit | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [116443](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116443) | Recommended Embedding Model Selection During Approved Knowledge Base Edit | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [116702](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116702) | Recommended Model- Notification | In Progress | Not Provided | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [116705](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116705) | View Artifact from Notification Details | New | Not Provided | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [119388](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119388) | Resolve Image Generation Issue for MCP Tools | New | Not Provided | 2 | Not Provided | 2026-11-04T00:00:00Z | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | AAVA |
-| [116673](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116673) | Onboard all direct models to AI Gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [116757](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116757) | Register Pantheon, Control Access and Block Unsupported Endpoints | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.3.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 |
-| [119759](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119759) | UX: Control overrides with delegation range and locks | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [119762](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119762) | UX: Draft, validate, publish and recover | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [119764](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119764) | UX: Use properties based on Capability | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4 |
-| [122200](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122200) | Route LLM Requests to Pantheon (Standard and Streaming) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 |
-| [122201](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122201) | Generate Embeddings via Pantheon | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 |
-| [122675](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122675) | AIG: Onboard Centene - Unity Framework Gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 |
-| [122710](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122710) | Enable Image and Attachment(multi model input) at AI Gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 |
-| [101785](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/101785) | Assign Executor Role from Console by Hierarchy Node Admins | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | AIG | 2.3.1.0 | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 |
-| [122770](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122770) | Enable Dynamic, Transformer‑Free LLM Onboarding to Reduce Model Onboarding Time (DB‑Driven Integration) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | AAVA |
-| [123815](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/123815) | AIG: Dev: Onboard Gemini gemini-3.8-flash and gemini-3.1-flash-lite to AAVA | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Sprint 6 | Not Provided | AAVA |
-
-*(All 180 User Stories are included; above is the full detail set.)*
+- Epics are present and prioritized but **not ready for quantitative roadmap tracking**.
+- To enable Epic-level capacity planning and progress measurement, the team must:
+  - Populate Effort and schedule (Start/Target Dates).
+  - Ensure Features and Stories underneath each Epic are estimated and sprint-assigned.
+  - Implement historical commitment tracking (via ADO snapshots or queries) before next PI.
 
 ---
 
-## 4. Planning Data Completeness Analysis
+# 3. Feature Planning and Accountability Report
 
-We analyze the 10 planning fields across 180 User Stories:
+## 3.1 Complete Feature Table — Core Planning
 
-- Story Points
-- Priority
-- Start Date
-- Due Date
-- UX Expected
-- Risk
-- Studio
-- Release Version
-- Planned Sprint
-- Dependent Team
+| Feature ID | Title | State | Priority | Effort | Target Date | Release Version | Studio | Planned Sprint | Estimated Completion Sprint | Complexity | Missing Planning Data |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| [53397](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53397) | Agent Creation & Discovery | Dev In Progress | 2 | Not Provided | 2026-09-06 | 2.2.1.0 | AIG | Sprint 1 | EC Sprint 2 | Not Provided | Effort; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [58004](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58004) | CSM and Platform Support Role - Assignment and Flag-Based Capabilities | Dev In Progress | 2 | Not Provided | 2026-07-05 | 2.2.1.0 | AIG | Not Provided | EC Sprint 2 | Not Provided | Effort; Planned Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51778](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51778) | Tech Stack Configurations - LLM | Testing | 2 | 5.0 | 2026-10-11 | 2.2.2.0 | AIG | Not Provided | EC Sprint 4 | High | Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped) |
+| [73737](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/73737) | Tech Stack Configurations - MCP Server | Active | 2 | 5.0 | 2026-11-22 | 2.3.0.1 | AIG | Sprint 1 | EC Sprint 4 | Not Provided | Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [83551](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/83551) | Tech Stack Configurations – AI & CLI Gateway | New | 2 | 5.0 | 2026-10-11 | 2.3.1.0 | AIG | Sprint 4 | EC Sprint 4 | Not Provided | Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51765](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51765) | On-Behalf-Of (OBO) Security Model for Agent Tool Access | Dev In Progress | 2 | 9.0 | 2026-08-09 | 2.2.1.0 | AIG | Sprint 1 | EC Sprint 2 | Not Provided | Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [58566](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58566) | Agent Versioning Enhancement | Dev In Progress | 2 | Not Provided | 2026-08-09 | 2.2.1.0 | AIG | Sprint 3 | Not Provided | Not Provided | Effort; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51771](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51771) | Token Exchange and Enterprise Authentication Patterns | New | 2 | 15.0 | 2026-07-05 | Not Provided | AIG | Sprint 1 | EC Sprint 3 | Not Provided | Release Version; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51720](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51720) | Closed-Loop Conversational Refinement with Unified Review | New | 2 | 26.0 | 2026-08-09 | Not Provided | AIG | Sprint 3 | EC Sprint 3 | Not Provided | Release Version; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51721](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51721) | Structured Feedback Capture and Run Traceability | New | 2 | 9.0 | 2026-08-09 | Not Provided | AIG | Sprint 4 | EC Sprint 4 | Not Provided | Release Version; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51722](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51722) | Learning Governance Workflow with Role-Based Approval | New | 2 | 29.0 | 2026-08-09 | Not Provided | AIG | Sprint 3 | EC Sprint 5 | Not Provided | Release Version; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51733](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51733) | Refinement Governance: Impact Analysis, Token Optimisation, and Iteration Control | New | 2 | 15.0 | 2026-08-09 | Not Provided | AIG | Sprint 3 | EC Sprint 3 | Not Provided | Release Version; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51735](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51735) | Learning Representation, Retrieval, and Controlled Memory Layer | New | 2 | 25.0 | 2026-08-09 | Not Provided | AIG | Sprint 4 | EC Sprint 4 | Not Provided | Release Version; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51747](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51747) | Enterprise IAM Integration & SSO | New | 2 | Not Provided | 2026-08-09 | 2.3.1.0 | AIG | Sprint 3 | EC Sprint 5 | Not Provided | Effort; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51769](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51769) | Schema-Driven Scalable Tool Onboarding | New | 2 | 12.0 | 2026-07-05 | Not Provided | AIG | Sprint 4 | EC Sprint 3 | Not Provided | Release Version; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51772](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51772) | Pre-Configured Squad-Level Tool Access with Jira Context Auto-Pull | New | 2 | 15.0 | Not Provided | Not Provided | AIG | Not Provided | EC Sprint 5 | Not Provided | Target Date; Release Version; Planned Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51789](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51789) | Enterprise Tool Template Library | New | 2 | 15.0 | Not Provided | Not Provided | AIG | Not Provided | EC Sprint 4 | Not Provided | Target Date; Release Version; Planned Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51779](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51779) | Configurable Defaults and Jira Context Auto-Pull Across Hierarchy Levels | New | 2 | 11.0 | Not Provided | Not Provided | AIG | Not Provided | EC Sprint 5 | Not Provided | Target Date; Release Version; Planned Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51780](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51780) | Enterprise-Scale Access Management via AD Groups and YAML-Driven Policies | New | 2 | 14.0 | Not Provided | Not Provided | AIG | Not Provided | EC Sprint 5 | Not Provided | Target Date; Release Version; Planned Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51784](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51784) | Clean-Build and Hierarchy Reset | New | 2 | 8.0 | Not Provided | Not Provided | AIG | Not Provided | EC Sprint 3 | Not Provided | Target Date; Release Version; Planned Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51790](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51790) | Tool Configuration Audit Trail | New | 2 | 24.0 | Not Provided | Not Provided | AIG | Not Provided | EC Sprint 4 | Not Provided | Target Date; Release Version; Planned Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51791](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51791) | NLP-Based Tool Suggestion and Guided Onboarding Trigger | New | 2 | 22.0 | 2026-10-11 | 2.3.1.0 | AIG | Sprint 2 | Not Provided | Not Provided | Business Value; Time Criticality; Start Date; Estimated Completion Sprint; Primary User Cohort (Unmapped); Complexity |
+| [51792](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51792) | Tool Lifecycle Management — Draft Active Deprecated Retired | New | 2 | 19.0 | 2026-10-11 | 2.3.1.0 | AIG | Sprint 1 | EC Sprint 2 | High | Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped) |
+| [51928](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51928) | Advanced Quality Assurance and Validation Controls | New | 2 | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | Effort; Target Date; Release Version; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51932](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51932) | Squad Templates and Self-Service Squad Creation | New | 2 | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | Effort; Target Date; Release Version; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51933](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51933) | Structure and Policy Effect Simulation | New | 2 | Not Provided | Not Provided | Not Provided | AIG | Not Provided | Not Provided | Not Provided | Effort; Target Date; Release Version; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [51935](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/51935) | Schema-Driven Tool Onboarding — Declarative Model | New | 2 | Not Provided | Not Provided | 2.3.1.0 | AIG | Sprint 4 | EC Sprint 3 | Not Provided | Effort; Target Date; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [65074](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/65074) | MCP Enablement Feature | Active | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Effort; Target Date; Release Version; Studio; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [72353](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/72353) | Agent Versioning Restore (Without Impact Analysis) | Dev In Progress | 2 | Not Provided | 2026-08-18 | 2.2.1.0 | AIG | Not Provided | Not Provided | Not Provided | Effort; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Primary User Cohort (Unmapped); Complexity |
+| [72436](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/72436) | Individual User Token Limit Override | New | 2 | Not Provided | 2026-10-11 | 2.3.2.0 | ACS | Not Provided | Not Provided | Not Provided | Effort; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [114968](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/114968) | Unity Framework Integration for LLM Calls in Databricks from AAVA AI Gateway | New | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Effort; Target Date; Release Version; Studio; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
+| [121855](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/121855) | Onboard Pantheon - LLM Provider in the AAVA AI Gateway | New | 2 | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Not Provided | Effort; Target Date; Release Version; Studio; Planned Sprint; Estimated Completion Sprint; Business Value; Time Criticality; Start Date; Primary User Cohort (Unmapped); Complexity |
 
-### 4.1 Field-Level Completeness
+Note: All Features have `unmappedPlanningFields: ["Primary User Cohort"]`.
 
-Counts derived strictly from the JSON:
+## 3.2 Feature Planning Health — Field Completeness
 
-| Planning Field  | Total Stories | Populated | Missing | Unmapped | Missing % | Completeness % |
-|-----------------|--------------|-----------|---------|----------|-----------|----------------|
-| Story Points    | 180          | 38        | 142     | 0        | 78.89%    | 21.11%         |
-| Priority        | 180          | 180       | 0       | 0        | 0.00%     | 100.00%        |
-| Start Date      | 180          | 10        | 170     | 0        | 94.44%    | 5.56%          |
-| Due Date        | 180          | 30        | 150     | 0        | 83.33%    | 16.67%         |
-| UX Expected     | 180          | 1         | 179     | 0        | 99.44%    | 0.56%          |
-| Risk            | 180          | 1         | 179     | 0        | 99.44%    | 0.56%          |
-| Studio          | 180          | 69        | 111     | 0        | 61.67%    | 38.33%         |
-| Release Version | 180          | 14        | 166     | 0        | 92.22%    | 7.78%          |
-| Planned Sprint  | 180          | 14        | 166     | 0        | 92.22%    | 7.78%          |
-| Dependent Team  | 180          | 10        | 170     | 0        | 94.44%    | 5.56%          |
+Fields evaluated:
 
-### 4.2 Overall Planning Completeness
+- Priority, Risk, Effort, Business Value, Time Criticality, Start Date, Target Date
+- Release Version, Studio, Planned Sprint, Estimated Completion Sprint, Primary User Cohort, Complexity
 
-- **Total expected values:** 10 planning fields × 180 stories = 1,800
-- **Total populated values:** 527
-- **Overall Planning Completeness:** 527 / 1,800 ≈ **29.28%**
-- **Overall Missing:** 1,273 / 1,800 ≈ **70.72%**
+Summary counts (based on the Feature list):
 
-### 4.3 Fields Missing Most Frequently and Impact
+| Planning Field | Provided | Missing (Not Provided) | Unmapped | Completeness % |
+|---|---|---|---|---|
+| Priority | 32 | 0 | 0 | 100% |
+| Risk | 0 | 32 | 0 | 0% |
+| Effort | ~18 | ~14 | 0 | ~56% |
+| Business Value | 0 | 32 | 0 | 0% |
+| Time Criticality | 0 | 32 | 0 | 0% |
+| Start Date | 1 | 31 | 0 | 3% |
+| Target Date | ~16 | ~16 | 0 | ~50% |
+| Release Version | ~15 | ~17 | 0 | ~47% |
+| Studio | ~28 | ~4 | 0 | ~88% |
+| Planned Sprint | ~13 | ~19 | 0 | ~41% |
+| Estimated Completion Sprint | ~20 | ~12 | 0 | ~62% |
+| Primary User Cohort | 0 | 0 | 32 (All Unmapped) | 0% (by extraction) |
+| Complexity | 2 (High) | 30 | 0 | 6% |
 
-Significant missing fields and impacts:
+Critical observations:
 
-#### Story Points (142 missing – 78.89%)
+- **Effort** is missing on many active Features.
+- **Business Value, Time Criticality, Risk** are entirely missing.
+- **Primary User Cohort** is **Unmapped** for all Features by the extraction.
+- Planned Sprint and Target Date are only partially set, causing release planning risk.
 
-- **Affected stories:** 142
-- **Impact:**
-  - Capacity planning and sprint load balancing are unreliable.
-  - Cannot compute meaningful Say-Do ratios or velocity-based forecasting.
-  - Risk of over- or under-committing each sprint.
-- **Corrective action:**
-  - Schedule backlog refinement sessions to estimate Story Points for all active and near-term backlog items.
-  - Prioritize estimation for items already in PI4 and sprint 1–3 iteration paths.
+## 3.3 Feature Action Report
 
-#### Planned Sprint (166 missing – 92.22%)
+| Feature ID | Missing / Invalid Information | Delivery Impact | Required Action | Suggested Owner | Priority |
+|---|---|---|---|---|---|
+| 53397 | Effort, Business Value, Time Criticality, Start Date; Primary User Cohort unmapped; Complexity | Cannot size or prioritize Agent Creation & Discovery for PI3\\Sprint 4; incomplete release planning | Add Effort in Feature Effort unit; capture Start Date; define Business Value & Time Criticality; confirm Primary User Cohort mapping in ADO | Product Owner (Owner To Be Assigned) | High |
+| 58004 | Effort, Planned Sprint, Business Value, Time Criticality, Start Date; Primary User Cohort unmapped | Role assignment capability has date & release but no sprint or sizing; risk to meeting 2026-07-05 | Estimate Effort; assign Planned Sprint consistent with EC Sprint 2; populate value/time criticality | Product Owner (Owner To Be Assigned) | High |
+| 58566 | Effort, Estimated Completion Sprint, Business Value, Time Criticality, Start Date | Versioning enhancement cannot be measured or scheduled; Target Date may not be realistic | Add Effort; define Estimated Completion Sprint; fill Business Value/Time Criticality; validate Target Date | Product Manager (Owner To Be Assigned) | High |
+| 51747 | Effort, Business Value, Time Criticality, Start Date | Enterprise IAM integration has release and sprint info but no estimate or value metrics | Estimate Feature Effort; capture Business Value; define Start Date and Time Criticality | Product Manager (Owner To Be Assigned) | High |
+| 51928 / 51932 / 51933 | Effort, Target Date, Release Version, Planned Sprint, Estimated Completion Sprint, value/time/risk | These backlog Features are not schedulable; cannot be included in PI planning with confidence | Groom and estimate; set Target Date and tentative sprints; capture minimal value and risk metadata | Product Owner (Owner To Be Assigned) | Medium |
+| 65074 | Effort, Target Date, Release Version, Studio, sprint/schedule fields | MCP Enablement Feature active but largely unplanned; delivery risk | Define owning Studio; estimate Effort; set target & sprints; align with gateway roadmap | Product Manager (Owner To Be Assigned) | High |
+| All Features | Risk, Business Value, Time Criticality; Primary User Cohort unmapped | Portfolio prioritization and user impact analysis are not possible from current data | Agree which planning fields are mandatory; populate value/time-criticality and risk for priority Features; resolve ADO mapping for Primary User Cohort | Product Manager + Azure DevOps Administrator (Owner To Be Assigned) | High |
 
-- **Affected stories:** 166
-- **Impact:**
-  - Poor visibility of when work is expected to be done.
-  - Difficult to assess sprint readiness, upcoming scope, and release alignment.
-- **Corrective action:**
-  - Product Owner and Scrum Master should ensure `plannedSprint` is set for all stories targeted for upcoming sprints (particularly PI4 sprints).
-  - Use this field consistently to distinguish intended sprint assignment from current `iterationPath`.
+## 3.4 Feature Delivery and Say-Do Assessment
 
-#### Start Date (170 missing – 94.44%)
+Constraints from JSON:
 
-- **Affected stories:** 170
-- **Impact:**
-  - Cannot determine planned start time for work, making schedule adherence and progress tracking difficult.
-  - Cannot perform lead time or cycle time analysis based solely on planning dates.
-- **Corrective action:**
-  - Adopt a lightweight convention for populating `startDate` (e.g., sprint start date or planned start milestone).
-  - For new work going into upcoming sprints, ensure `startDate` is set during sprint planning.
+- No **historical sprint commitment** data:
+  - No record of what Features were in each sprint backlog at sprint start.
+- No **completion timestamps** at Feature level.
+- Effort present for some Features, but:
+  - Units are "Feature Effort" and not related to Story Points.
+  - No roll-up policy from child Stories.
+- Thus, neither Feature Effort nor child Story Points can be safely used for historical Say-Do.
 
-#### Due Date (150 missing – 83.33%)
+Result:
 
-- **Affected stories:** 150
-- **Impact:**
-  - Difficult to identify overdue work or upcoming deadlines at a backlog-wide level.
-  - Limits schedule and release risk analysis.
-- **Corrective action:**
-  - For customer-facing or release-critical items, set a due date aligned to target release or milestone.
-  - For internal technical work, consider using sprint end date or PI objective deadlines where relevant.
+- **Feature Say-Do Ratio (per sprint)**: **Insufficient Data**.
+- Required additional data:
+  - Sprint definitions (start/end dates) with committed backlog snapshots.
+  - Completed-in-sprint vs completed-after-sprint transitions.
+  - Parent-child hierarchy (Epic → Feature → Story) with stable roll-up policy.
 
-#### UX Expected (179 missing – 99.44%)
+### 3.4.1 Feature State Distribution Chart
 
-- **Affected stories:** 179  
-- **Interpretation:** This field is likely optional; its applicability varies.
-- **Impact:**
-  - Limited ability to coordinate UX design timelines, handoffs, and readiness.
-- **Corrective action:**
-  - Clarify when `uxExpected` should be used (e.g., UX-led stories requiring designs by a certain date).
-  - Populate only for applicable stories; currently only one (`53400`) has this populated.
+```mermaid
+xychart
+  title "Features by State"
+  xAxis [New, Active, Dev In Progress, Testing]
+  yAxis "Count" 0 --> 32
+  bar "Features" [~24, 3, 4, 1]
+```
 
-#### Risk (179 missing – 99.44%)
+(Counts approximated from JSON; all actual Features are listed in tables.)
 
-- **Affected stories:** 179  
-- **Interpretation:** Optional but critical for risk visibility when applicable.
-- **Impact:**
-  - Risks are almost entirely uncaptured at the User Story level; management cannot easily see high-risk items.
-- **Corrective action:**
-  - Define a simple risk classification scheme (e.g., 1-High, 2-Medium, 3-Low) and apply it to at least high-impact or uncertain items.
-  - Encourage POs and Engineering Leads to populate Risk for On Hold, Re-Opened, or high-priority items.
+### 3.5 Feature Management Interpretation
 
-#### Dependent Team (170 missing – 94.44%)
-
-- **Affected stories:** 170  
-- **Impact:**
-  - Cross-team dependencies are almost invisible in planning data.
-  - Coordination with teams like DevSecOps is not surfaced except for one story (`93164`).
-- **Corrective action:**
-  - Use `dependentTeam` for any story requiring another team’s work (DevSecOps, ACE, Foundation, etc.).
-  - Incorporate dependency reviews in PI and sprint planning ceremonies.
-
----
-
-## 5. Backlog Readiness and Planning Gaps
-
-### 5.1 Readiness Criteria (Planning Data Perspective)
-
-Per instructions, readiness is determined using:
-
-- **Primary indicators:**
-  - Story Points
-  - Priority
-  - Planned Sprint
-
-Assuming:
-
-- **Ready:** Story has Story Points and a Planned Sprint; Priority is populated (all 180).
-- **Partially Ready:** Story has Story Points but no Planned Sprint (priority present), or vice versa; or missing one of the critical fields but still somewhat usable for near-term planning.
-- **Not Ready:** Missing Story Points and Planned Sprint, or Story Points missing (even if Planned Sprint exists), leaving estimation incomplete.
-- **Unable to Assess:** Would be used if fields were unmapped/unavailable (not the case here).
-
-Given all stories have Priority:
-
-- Stories with **Story Points populated:** 38
-- Stories with **Planned Sprint populated:** 14
-
-Intersect:
-
-- Stories with **both** Story Points and Planned Sprint:  
-  - `53401`, `53400`, `54356`, `54359`, `73869`, `81732`, `81826`, `81849` plus several others in PI4 (from table).  
-  On review, **none** have both fields populated for all essential criteria in a way that clearly indicates fully ready; however their counts are used in classification.
-
-Pragmatic classification (based strictly on data):
-
-- **Ready:** StoryPoints populated AND PlannedSprint populated  
-  - Count: 0 (because either StoryPoints or PlannedSprint missing for each candidate once verifying the entire dataset)
-- **Partially Ready:** StoryPoints populated OR PlannedSprint populated (but not both)  
-  - Count: 30 (estimated from intersecting sets; these have at least one critical field populated)
-- **Not Ready:** Neither StoryPoints nor PlannedSprint populated (Priority always present)  
-  - Count: 150
-- **Unable to Assess:** 0 (no unmapped fields)
-
-Percentages:
-
-- Ready: 0 / 180 = **0.00%**
-- Partially Ready: 30 / 180 ≈ **16.67%**
-- Not Ready: 150 / 180 ≈ **83.33%**
-- Unable to Assess: 0 / 180 = **0.00%**
-
-### 5.2 Readiness Table (Representative Examples)
-
-Given the large backlog, below is a representative slice showing classification logic, not a full table of 180 rows (which is already detailed above). Readiness is derived strictly from the planning data:
-
-| User Story ID | Title | State | Missing Critical Fields | Readiness Status | Recommended Action |
-|---------------|-------|-------|-------------------------|------------------|--------------------|
-| 53400 | Test Agent in Mini Playground | New | Planned Sprint: None (provided), Story Points: Present | Partially Ready | Confirm planned sprint and refine estimate alignment with PI4 objectives. |
-| 53401 | Agent Creation - Select Model | Re-Opened | Start Date, Due Date | Partially Ready | Clarify schedule and confirm sprint usage before rework. |
-| 73869 | Executor (Execute-Only Role): Invoke Agent, Workflow Without Visibility of Internal Configuration | Re-Opened | Start Date | Partially Ready | Add start date, confirm current sprint commitment. |
-| 81732 | API: LLM Model - Details Page - Functionality | Planned | Start Date | Partially Ready | Validate Story Points vs sprint capacity. |
-| 81826 | API: Add LLM Model: Level Access Step (Default – Full Organization) | Active | Start Date | Partially Ready | Track and update schedule to prevent uncontrolled sprawl. |
-| 53146 | Resolve Security Vulnerabilities Across Backend Services and Dependencies | On Hold | Story Points missing? (No; has 3), Planned Sprint missing | Partially Ready | Assign to sprint before reactivation; review On Hold reason. |
-| 93164 | Add LLM Models to Dev Environment | Active | Story Points, Start Date, Due Date, Planned Sprint | Not Ready | Estimate and assign sprint; dependency on DevSecOps should be clarified. |
-| 57150 | Playground Menu Left nav... | New | Story Points, Start Date, Due Date, Planned Sprint | Not Ready | Estimation and sprint assignment are required; Risk high. |
-| 62832 | Enabling - GPT 5.3 codex spark | On Hold | Story Points, Start Date, Due Date, Planned Sprint | Not Ready | Clarify whether to keep or remove from backlog; assign if continuing. |
-| 75347 | Register a new MCP server through the guided setup flow | New | Planned Sprint, Start Date, Due Date | Partially Ready (has Story Points 0) | Confirm whether 0 points is intended; assign to sprint. |
-
-> **Note:** This classification is explicitly limited to planning data readiness (Story Points, Priority, Planned Sprint); it is **not** a full Definition of Ready assessment. Definition of Ready would additionally require verified acceptance criteria, dependencies, UX artifacts, and tech feasibility, which are not fully present in the JSON.
+- The Feature backlog is **rich but under-planned**: many Features have estimates or dates, but rarely both.
+- Value, risk, and time criticality metadata are absent, hindering prioritization and risk management.
+- Say-Do at Feature level cannot be calculated from current extraction; sprint commitment snapshots must be added to the reporting pipeline.
 
 ---
 
-## 6. Work Item State and Delivery Analysis
+# 4. User Story Planning and Accountability Report
 
-### 6.1 Distribution by State
+## 4.1 Complete User Story Table — Core Planning
 
-From Section 2:
+Due to 180 User Stories, the table is wide; the following columns are included as required:
 
-| State                | Number of Stories | Percentage  | Total Known Story Points | Stories Without Story Points |
-|----------------------|-------------------|-------------|--------------------------|------------------------------|
-| New                  | 108               | 60.00%      | 72.0                     | 96                           |
-| Active               | 11                | 6.11%       | 20.0                     | 7                            |
-| Resolved             | 11                | 6.11%       | 56.0                     | 7                            |
-| On Hold              | 6                 | 3.33%       | 8.0                      | 5                            |
-| Dev-Deployed         | 9                 | 5.00%       | 9.0                      | 8                            |
-| Ready for QA         | 6                 | 3.33%       | 5.0                      | 5                            |
-| Re-Opened            | 8                 | 4.44%       | 30.0                     | 1                            |
-| Dev In Progress      | 6                 | 3.33%       | 33.0                     | 4                            |
-| Require Clarification| 2                 | 1.11%       | 0.0                      | 2                            |
-| Ready for Dev        | 1                 | 0.56%       | 0.0                      | 1                            |
-| Ready for Design     | 1                 | 0.56%       | 0.0                      | 1                            |
-| Groomed              | 2                 | 1.11%       | 0.0                      | 2                            |
-| Planned              | 1                 | 0.56%       | 5.0                      | 0                            |
+| Story ID | Title | State | Story Points | Priority | Start Date | Due Date | Planned Sprint | Iteration Path | Release Version | Missing Planning Data |
+|---|---|---|---|---|---|---|---|---|---|---|
+| [93164](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/93164) | Add LLM Models to Dev Environment | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [122848](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122848) | Configure LLM Model Access by Organization, Track, Application, and Team | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [104421](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/104421) | Sonar Violations and SonarLint usage | Active | 3.0 | 1 | Not Provided | 2026-10-14 | Not Provided | AAVA\\PI4\\Sprint 4 | Not Provided | Start Date; Planned Sprint; Release Version |
+| [120919](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/120919) | Resolved Merge Conflicts and Completed Azure Foundry PR | Resolved | 1.0 | 2 | 2026-11-02 | 2026-11-02 | Not Provided | AAVA\\PI4\\Sprint 5 | Not Provided | Planned Sprint; Release Version |
+| [63449](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/63449) | Sprint 3 - QE Other Prioritized Activities - Int | New | Not Provided | 3 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [53146](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53146) | Resolve Security Vulnerabilities Across Backend Services and Dependencies | On Hold | 3.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 1 | Not Provided | Start/Due Date; Planned Sprint; Release Version; On Hold requires review |
+| [70433](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70433) | Sprint 4 - UTC Coverage - Int | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [119396](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119396) | Bug-- Resolve Works Intermittently and Configure Tool Page Displays No Generated Data | Resolved | Not Provided | 2 | 2026-10-30 | 2026-10-30 | Not Provided | AAVA\\PI4\\Sprint 5 | Not Provided | Story Points; Planned Sprint; Release Version |
+| [119380](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119380) | BUG: Fix Incorrect Python Code Generation During Tool Creation in QE env | Resolved | Not Provided | 2 | 2026-10-28 | 2026-10-28 | Not Provided | AAVA\\PI4\\Sprint 5 | Not Provided | Story Points; Planned Sprint; Release Version |
+| [70440](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70440) | Sprint 4 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [70445](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70445) | Sprint 4 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [70449](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70449) | Sprint 4 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [70450](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70450) | Sprint 4 - Implement Common Logging and Exception Libraries | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [70431](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70431) | Sprint 4 - CVE Remediation and Security Vulnerability Fixes - Int | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [53369](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53369) | Console: Configure Pre-Configuration Defaults for an Assigned Hierarchy Level | Ready for Dev | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [107930](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/107930) | Edit and Validate JSON Parameter Mapping | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Sprint 3 | AAVA\\PI4\\Sprint 1 | Not Provided | Story Points; Start/Due Date; Release Version |
+| [109933](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109933) | Model Identity & Token Limits Configuration Values | New | Not Provided | 2 | Not Provided | Not Provided | Sprint 3 | AAVA\\PI4\\Sprint 1 | Not Provided | Story Points; Start/Due Date; Release Version |
+| [106264](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106264) | Dynamic Model Availability Across AAVA | New | Not Provided | 2 | Not Provided | Not Provided | Sprint 1 | AAVA\\PI4\\Sprint 1 | Not Provided | Story Points; Start/Due Date; Release Version |
+| [111123](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/111123) | Expired Model Handling | Groomed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [114380](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/114380) | MCP Attribute Validation | Active | Not Provided | 2 | Not Provided | Not Provided | Sprint 4 | AAVA\\PI4\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Release Version |
+| [116401](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116401) | LLM Model Expiry Date Validation-SUDO | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [65602](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/65602) | Sprint 3 - Client Issue Resolution & Other Team Support - Int | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [36969](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/36969) | MCP-based GitHub Integration | Dev In Progress | 2.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [73732](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/73732) | UX: MCP server registration flow: dashboard, guided setup, and review | Ready for Validation | 2.0 | 2 | Not Provided | 2026-10-28 | Not Provided | AAVA\\PI3\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [53401](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53401) | Agent Creation - Select Model | Re-Opened | 3.0 | 1 | Not Provided | Not Provided | Sprint 1 | AAVA\\PI3\\Sprint 2 | 2.2.1.0 | Start/Due Date |
+| [53400](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53400) | Test Agent in Mini Playground | New | 8.0 | 2 | Not Provided | Not Provided | Sprint 1 | AAVA | Not Provided | Start/Due Date; Release Version |
+| [54251](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54251) | Implement OBO flow for agent /workflow/tools | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [54252](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54252) | MCP security | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [54356](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54356) | Tool & MCP Integration Validation Before Publishing | Ready for Design | Not Provided | 2 | Not Provided | Not Provided | Sprint 1 | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Release Version |
+| [54359](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54359) | Release Notes & Impact Analysis For Tools | On Hold | Not Provided | 2 | Not Provided | Not Provided | Sprint 1 | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Release Version; On Hold needs review |
+| [55030](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55030) | Autonomus Tool Invocation in Workflows | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55034](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55034) | OBO Permission Enforcement for Autonomous Calls | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55035](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55035) | Autonomus Invocation Audit Logging | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55039](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55039) | Autonomus Invocation Security Boundary Enforcement | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55074](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55074) | Invocation Rate Limiting and Governance | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55075](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55075) | Secure Logging and Secret Protection | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55076](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55076) | Schema-Driven Tool Onboarding | New | Not Provided | 1 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55077](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55077) | Schema Validation and Connection Testing | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [55078](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/55078) | Tool Versioning and Metadata Management | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [56722](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/56722) | UX- Configurable Defaults and Jira Context Auto-Pull Across Hierarchy Levels | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [56726](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/56726) | UI- Configurable Defaults and Jira Context Auto-Pull Across Hierarchy Levels | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [56728](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/56728) | API- Configurable Defaults and Jira Context Auto-Pull Across Hierarchy Levels | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [57510](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57510) | UX: View and manage property values at a node | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [57816](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57816) | UI -Agent Permission Denied Notification & Audit UI | Require Clarification | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version; Clarification needed |
+| [57820](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57820) | API- On-Behalf-Of (OBO) Authorization Enforcement APIs | Require Clarification | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version; Clarification needed |
+| [58006](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58006) | SUDO - CSM and PS Role Assignment | Re-Opened | 5.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 2 | 2.2.1.0 | Start/Due Date; Planned Sprint |
+| [64169](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/64169) | Revoke Admin and User Role Access for CSM & PS Role Users | Re-Opened | 4.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 | 2.2.1.0 | Start/Due Date; Planned Sprint |
+| [58014](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58014) | UX: Tool Lifecycle Status Indicators and Transitions | On Hold | 2.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Start/Due Date; Planned Sprint; Release Version; On Hold review |
+| [58015](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58015) | Notify Affected Agent and Workflow Owners on Tool Deprecation or Retirement | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [58016](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58016) | Enforce Invocation Rules for Deprecated Tools | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [58018](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58018) | Impact Analysis Report for Tool Lifecycle Transitions | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [58019](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/58019) | Manage Tool Lifecycle Through Formal States (Draft → Active → Deprecated → Retired) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [62832](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/62832) | Enabling - GPT 5.3 codex spark | On Hold | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\Release_2026.2.0 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version; On Hold review |
+| [57750](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57750) | UI -Build Agent Version History | Re-Opened | 3.0 | 2 | Not Provided | 2026-08-10 | Not Provided | AAVA\\PI3\\Sprint 4 | 2.2.1.0 | Start Date; Planned Sprint |
+| [65153](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/65153) | API- Restore Agent to Previous Version from Version History | Re-Opened | 3.0 | 2 | Not Provided | 2026-08-14 | Not Provided | AAVA\\PI4\\Sprint 1 | 2.2.1.0 | Start Date; Planned Sprint |
+| [70924](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/70924) | UI-Feature Flag- Restore | Ready for QA | 1.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | 2.2.1.0 | Start/Due Date; Planned Sprint |
+| [69441](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/69441) | Discover: Add MCP Search Functionality | Ready for QA | Not Provided | 2 | 2026-07-27 | 2026-07-28 | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Planned Sprint; Release Version |
+| [54249](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/54249) | CORE: SAML Integration in Auth Service | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [65570](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/65570) | Display Personalised Welcome Message on Platform Landing Pages | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [57150](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/57150) | Playground Menu Left nav for conversational with Selection of Models drop down similar to 1.0 | New | Not Provided | 3 | Not Provided | Not Provided | Not Provided | AAVA | 2.3.2.0 | Story Points; Start/Due Date; Planned Sprint; risk present (1 - High) handled; Release Version provided |
+| [66418](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/66418) | OBO Authentication for Predefined Integration Tools | Active | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [66487](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/66487) | Data bricks model changes in ai gateway | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [71193](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/71193) | Checkmarx SAST & SCA Findings Remediation (17th July 2026) | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [68494](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/68494) | MCP: QTest | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [68495](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/68495) | MCP: TestRail | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [73869](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/73869) | Executor (Execute-Only Role): Invoke Agent, Workflow Without Visibility of Internal Configuration | Re-Opened | 5.0 | 2 | Not Provided | 2026-08-18 | Sprint 1 | AAVA\\PI4\\Sprint 1 | 2.2.1.0 | Start Date |
+| [81732](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81732) | API: LLM Model - Details Page - Functionality | Planned | 5.0 | 2 | Not Provided | 2026-08-25 | Sprint 1 | AAVA\\PI4\\Sprint 2 | Not Provided | Start Date; Release Version |
+| [81826](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81826) | API: Add LLM Model: Level Access Step (Default – Full Organization) | Active | 15.0 | 2 | Not Provided | 2026-08-28 | Sprint 1 | AAVA\\PI4\\Sprint 2 | Not Provided | Start Date; Release Version |
+| [103158](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/103158) | KPMG - Consume Claude models from Azure AI Foundry as LLM providers in the platform | Resolved | Not Provided | 2 | 2026-10-01 | 2026-10-07 | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Planned Sprint; Release Version |
+| [74517](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/74517) | Hide Version History | Ready for QA | 2.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | 2.2.1.0 | Start/Due Date; Planned Sprint |
+| [75029](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75029) | PI4 Sprint 4 - Backlog Defect/Current Build Defect Resolution - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75031](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75031) | PI4 Sprint 4 - CVE Remediation and Security Vulnerability Fixes - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75033](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75033) | PI4 Sprint 4 - UTC Coverage - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75036](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75036) | PI4 Sprint 4 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75037](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75037) | PI4 Sprint 4 - Release Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75039](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75039) | PI4 Sprint 4 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75042](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75042) | PI4 Sprint 4 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75043](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75043) | PI4 Sprint 3 - Backlog Defect/Current Build Defect Resolution - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75045](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75045) | PI4 Sprint 3 - CVE Remediation and Security Vulnerability Fixes - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75047](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75047) | PI4 Sprint 3 - UTC Coverage - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75050](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75050) | PI4 Sprint 3 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75051](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75051) | PI4 Sprint 3 - Release Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75053](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75053) | PI4 Sprint 3 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75056](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75056) | PI4 Sprint 3 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75057](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75057) | PI4 Sprint 2 - Backlog Defect/Current Build Defect Resolution - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75059](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75059) | PI4 Sprint 2 - CVE Remediation and Security Vulnerability Fixes - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75061](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75061) | PI4 Sprint 2 - UTC Coverage - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75064](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75064) | PI4 Sprint 2 - QE Other Prioritized Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75065](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75065) | PI4 Sprint 2 - Release Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75067](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75067) | PI4 Sprint 2 - Lead Activities - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75070](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75070) | PI4 Sprint 2 - Client Issue Resolution & Other Team Support - Int | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75215](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75215) | Enforce Invocation Failure for Retired Tools | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75216](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75216) | Record All Lifecycle State Transitions in the Tool Audit Trail | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75217](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75217) | Draft-to-Active Approval Workflow | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75218](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75218) | Admin-Initiated Tool Deprecation with Impact Analysis | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75219](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75219) | Feature Flag–Controlled Deprecation and Retirement Actions for Admin and Super-Admin | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75220](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75220) | Allow Admins to Restore a Deprecated Tool to Active Without Secondary Approval | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75221](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75221) | Allow Admins to Retire a Deprecated Tool After Impact Review | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75222](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75222) | Restore a Tool from Retired State (Super-Admin Only with Secondary Approval) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75267](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75267) | UX: NLP-based Tool Suggestion, Matching, Clone, and Guided Creation | On Hold | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version; On Hold |
+| [75325](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75325) | SUDO: MCP Server List | New | 16.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [75273](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75273) | Detect Unrecognized Tool References During Natural Language Agent Building | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [75278](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75278) | Display Matching Tools and MCP Endpoints Before Initiating New Tool Creation | New | Not Provided | 2 | Not Provided | 2026-09-30 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [75280](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75280) | Enable Users to Test Existing Tools from the Matching Results Panel | New | Not Provided | 2 | Not Provided | 2026-09-30 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [75281](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75281) | Require Justification Before Cloning an Existing Tool or Creating a New Tool | New | Not Provided | 2 | Not Provided | 2026-09-30 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [75282](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75282) | Guide Users Through Step-by-Step Tool Creation with Pre-Populated Fields | New | Not Provided | 2 | Not Provided | 2026-09-30 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [75283](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75283) | Save and Test the Validated Tool Definition from the Creation Flow | New | Not Provided | 2 | Not Provided | 2026-09-30 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [75284](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75284) | Validate Tool Definition After Creation or Refinement and Display Errors with Fix Suggestions | New | Not Provided | 2 | Not Provided | 2026-09-30 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [75285](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75285) | Allow Users to Refine the AI-Generated Tool Definition Using a Refine Action | New | Not Provided | 2 | Not Provided | 2026-09-30 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [93754](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/93754) | UI: SUDO: MCP Server List | New | 16.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [93755](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/93755) | API: SUDO: MCP Server List | New | 16.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [75326](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75326) | Add MCP – Identify & Capabilities | Resolved | 10.0 | 2 | Not Provided | 2026-10-28 | Not Provided | AAVA\\PI4\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [122850](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122850) | Enable Level Access for MCP Onboarding | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [110457](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/110457) | Add MCP – Connection Configuration | Dev In Progress | 10.0 | 2 | Not Provided | 2026-10-28 | Not Provided | AAVA\\PI4\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [113707](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/113707) | Bug Fix 2.1.3.1- KB Read is failing when we use agent with KB | Resolved | 16.0 | 2 | 2026-10-12 | 2026-10-13 | Not Provided | AAVA\\PI4\\Sprint 4 | Not Provided | Planned Sprint; Release Version |
+| [113708](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/113708) | Bug- Fix - Tool execution is not happening when we use gateway model in 2.1.3.1 release (KPMG) | Resolved | 8.0 | 2 | 2026-10-13 | 2026-10-13 | Not Provided | AAVA\\PI4\\Sprint 4 | Not Provided | Planned Sprint; Release Version |
+| [94022](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94022) | UI: Add MCP Server: Identity & Capabilities Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94023](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94023) | API: Add MCP Server: Identity & Capabilities Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [75327](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75327) | Manage MCP Configuration from SUDO – Tech Stack Configuration | Dev In Progress | 7.0 | 2 | Not Provided | 2026-10-28 | Not Provided | AAVA\\PI4\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [94025](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94025) | API: Add MCP Server: Connection Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94026](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94026) | UI: Add MCP Server: Connection Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [75328](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75328) | Add MCP- Policies Configuration | Resolved | 7.0 | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA\\PI4\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [94027](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94027) | UI: Add MCP Server: Policies Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94028](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94028) | API: Add MCP Server: Policies Step | New | 7.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [75329](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75329) | Add MCP Server: Tool Requirements Step | On Hold | 10.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 4 | Not Provided | Start/Due Date; Planned Sprint; Release Version; On Hold |
+| [94030](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94030) | UI: Add MCP Server: Tool Requirements Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94031](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94031) | API: Add MCP Server: Tool Requirements Step | New | 10.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/DueDate; Planned Sprint; Release Version |
+| [75330](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75330) | Add MCP Server: Validation Step | Active | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94033](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94033) | UI: Add MCP Server: Validation Step | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94034](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94034) | API: Add MCP Server: Validation Step | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [75332](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75332) | Add MCP Server: Level Access Step | Resolved | 12.0 | 2 | Not Provided | 2026-10-28 | Not Provided | AAVA\\PI4\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [94037](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94037) | UI: Add MCP Server: Level Access Step | Dev In Progress | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94038](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94038) | API: Add MCP Server: Level Access Step | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [75333](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75333) | Add MCP Server: Review & Test – Connection Status Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94040](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94040) | UI: Add MCP Server: Review & Test – Connection Status Tab | Dev In Progress | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94041](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94041) | MCP- Tool Inspection & Test | Dev In Progress | 12.0 | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA\\PI4\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [116803](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116803) | Make Onboarded MCP Available to Users and Admins | Resolved | 12.0 | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA\\PI4\\Sprint 4 | 2.3.0.1 | Start Date; Planned Sprint |
+| [75334](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75334) | Add MCP Server: Review & Test – Assigned Access Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94042](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94042) | UI: Add MCP Server: Review & Test – Assigned Access Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version |
+| [94043](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/94043) | API: Add MCP Server: Review & Test – Assigned Access Tab | New | 12.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/DueDate; Planned Sprint; Release Version |
+| [75347](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/75347) | Register a new MCP server through the guided setup flow | New | 0.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 2 | Not Provided | Start/Due Date; Planned Sprint; Release Version; check estimation validity (0.0) |
+| [53398](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/53398) | Describe Business Problem & Discover Agents | Re-Opened | 6.0 | 2 | Not Provided | Not Provided | Sprint 1 | AAVA\\PI3\\Sprint 2 | 2.2.1.0 | Start/Due Date |
+| [105194](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/105194) | UX: Hierarchy Structure UX Redesign | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 | 2.3.1.0 | Story Points; Start/Due Date; Planned Sprint |
+| [109141](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109141) | Consume GPT Models Through AWS Bedrock | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 | 2.3.1.0 | Story Points; Start/Due Date; Planned Sprint |
+| [109476](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109476) | Removal of Level Access Function | Ready for QA | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [81849](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81849) | API: Add LLM Model: Review Step | Dev-Deployed | 4.0 | 2 | Not Provided | 2026-08-25 | Sprint 1 | AAVA\\PI4\\Sprint 2 | Not Provided | Start Date; Release Version |
+| [81747](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81747) | API: Expired or Disabled LLM Model: Execution Block and Warning for Affected Agents and Workflows | New | Not Provided | 2 | Not Provided | 2026-08-28 | Sprint 1 | AAVA\\PI4 | Not Provided | Story Points; Start Date; Release Version |
+| [81748](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/81748) | UI: Expired or Disabled LLM Model: Execution Block and Warning for Affected Agents and Workflows | New | Not Provided | 2 | Not Provided | 2026-08-28 | Sprint 1 | AAVA\\PI4 | Not Provided | Story Points; Start Date; Release Version |
+| [83476](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/83476) | Passwordless for Storage & Secrets | Dev-Deployed | 5.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 | 2.2.1.0 | Start/Due Date; Planned Sprint |
+| [74452](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/84576) | Show All-Level Access Indicator for Super Admin, CSM, PS, Executor | Ready for QA | 1.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 | 2.2.1.0 | Start/Due Date; Planned Sprint |
+| [84576](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/84576) | Show All-Level Access Indicator for Super Admin, CSM, PS, Executor | Ready for QA | 1.0 | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 | 2.2.1.0 | Start/Due Date; Planned Sprint |
+| [90768](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/90768) | Hide My Space -> Download VS Code Plugin Bar for Executor Role | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [106937](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106937) | Register and consume Claude models from Azure AI Foundry as LLM providers in the platform | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | 2.3.1.0 | Story Points; Start/Due Date; Planned Sprint |
+| [104062](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/104062) | Premera: OBO authentication list available ADO tools through the MCP gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [105215](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/105215) | Multi-Select Agents, Workflows, Guardrails, and Knowledge Bases for All Users under Discovery Tab | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI3\\Sprint 4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [106348](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106348) | Status-Specific Edit Restriction Messaging for Artifacts | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [106787](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/106787) | Enable Scrolling for Lengthy Tool Execution Output | Groomed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 1 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [109089](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109089) | Passwordless update for sharepoint,confluence and github | Dev-Deployed | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 3 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [109891](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/109891) | MCP: Salesforce | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [119390](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119390) | Resolve Image Generation Issue for LLM Models | New | Not Provided | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [119650](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119650) | Standardize LLM Model Expiry Timezone to UTC | New | Not Provided | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [116434](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116434) | LLM Model Expiry Notification During Agent Creation | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [116435](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116435) | Embedding Model Expiry Notification During Knowledge Base Creation | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [116439](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116439) | Recommended Model Selection During Approved Agent Edit | In Progress | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [116443](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116443) | Recommended Embedding Model Selection During Approved Knowledge Base Edit | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [116702](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116702) | Recommended Model- Notification | In Progress | Not Provided | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [116705](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116705) | View Artifact from Notification Details | New | Not Provided | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [119388](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119388) | Resolve Image Generation Issue for MCP Tools | New | Not Provided | 2 | Not Provided | 2026-11-04 | Not Provided | AAVA | Not Provided | Story Points; Start Date; Planned Sprint; Release Version |
+| [116673](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116673) | Onboard all direct models to AI Gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [116757](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/116757) | Register Pantheon, Control Access and Block Unsupported Endpoints | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 5 | 2.3.1.0 | Story Points; Start/Due Date; Planned Sprint |
+| [119759](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119759) | UX: Control overrides with delegation range and locks | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [119762](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119762) | UX: Draft, validate, publish and recover | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [119764](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/119764) | UX: Use properties based on Capability | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [122200](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122200) | Route LLM Requests to Pantheon (Standard and Streaming) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [122201](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122201) | Generate Embeddings via Pantheon | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [122675](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122675) | AIG: Onboard Centene - Unity Framework Gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [122710](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122710) | Enable Image and Attachment(multi model input) at AI Gateway | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [101785](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/101785) | Assign Executor Role from Console by Hierarchy Node Admins | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA\\PI4\\Sprint 6 | 2.3.1.0 | Story Points; Start/Due Date; Planned Sprint |
+| [122770](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/122770) | Enable Dynamic, Transformer‑Free LLM Onboarding to Reduce Model Onboarding Time (DB‑Driven Integration) | New | Not Provided | 2 | Not Provided | Not Provided | Not Provided | AAVA | Not Provided | Story Points; Start/Due Date; Planned Sprint; Release Version |
+| [123815](https://dev.azure.com/ascendionava/AAVA/_workitems/edit/123815) | AIG: Dev: Onboard Gemini gemini-3.8-flash and gemini-3.1-flash-lite to AAVA | New | Not Provided | 1 | Not Provided | Not Provided | Sprint 6 | AAVA | Not Provided | StoryPoints; Start/Due Date; Release Version |
 
-*(Story point totals per state are derived from scanning the table; only populated values are counted.)*
+(UX Expected, Studio, Risk, Dependent Team details are retained and considered in health but omitted from this core table for brevity.)
 
-### 6.2 Highlights
+## 4.2 User Story Planning Health
 
-- **High concentration in “New”:** 108 stories (60%) remain in the New state.
-  - Many of these have no Story Points and no Planned Sprint.
-  - This suggests a large, unrefined backlog pool.
+Fields evaluated:
 
-- **On Hold stories:** 6 stories, 8 Story Points known.
-  - On Hold with missing dates and dependencies represent potential blockers that may delay releases or clutter backlog:
-    - Examples: 53146, 58014, 62832, 75329, 75267, plus one more.
+- Story Points, Priority, Start Date, Due Date, UX Expected, Risk, Studio, Release Version, Planned Sprint, Dependent Team.
 
-- **Re-Opened stories:** 8 stories, 30 Story Points.
-  - Rework or quality issues are indicated; may affect predictability:
-    - Examples: 53401, 58006, 64169, 57750, 65153, 73869, 53398, 57750 (duplicate listing avoided in analysis but present in data).
+High-level completeness:
 
-- **Unestimated stories:** 142, spread across all states.
-  - Even some Resolved and Dev-Deployed items are unestimated, which complicates historical velocity measurement.
+| Planning Field | Provided | Missing (Not Provided) | Unmapped | Completeness % |
+|---|---|---|---|---|
+| Story Points | ~60 | ~120 | 0 | ~33% |
+| Priority | 180 | 0 | 0 | 100% |
+| Start Date | ~15–20 | ~160+ | 0 | ~10% |
+| Due Date | ~40–50 | ~130+ | 0 | ~25% |
+| UX Expected | Very few | Majority Missing | 0 | Low (optional field) |
+| Risk | 1 (57150) | 179 | 0 | <1% |
+| Studio | Many (AIG/ACS/Foundation) | Some Missing | 0 | ~70% |
+| Release Version | Several (2.2.1.0, 2.3.0.1, 2.3.1.0, 2.3.2.0) | Majority Missing | 0 | ~20–25% |
+| Planned Sprint | ~30 | ~150 | 0 | ~17% |
+| Dependent Team | 1 ("DevSecOps") | 179 | 0 | ~1% |
 
-- **High-priority incomplete stories:**
-  - Priority 1 exists only on a small set of stories (e.g., 104421, 53401, 55030, 55035, 55076, 57150, 123815).
-  - Several of these are New or Re-Opened, with missing Story Points or sprint assignment, representing planning risk.
+Priority and Iteration Path are well populated; **Story Points and Planned Sprint are the main gaps for sprint measurement readiness.**
+
+## 4.3 User Story Action Report
+
+Selected critical actions (representative; many similar stories share same gap pattern):
+
+| Story ID | Missing / Invalid Information | Sprint / Delivery Impact | Required Action | Suggested Owner | Priority |
+|---|---|---|---|---|---|
+| 93164 | Story Points, Start/Due Date, Planned Sprint | Active story in PI4\\Sprint 2 cannot be measured or forecasted | Estimate Story Points; set realistic Start/Due Date; confirm Planned Sprint alignment with Iteration | Product Owner (Owner To Be Assigned) | High |
+| 122848 | Story Points, schedule, Planned Sprint | New story in AAVA backlog; cannot be included in PI planning accurately | Add Story Points; define planned sprint; set basic schedule if applicable | Product Owner (Owner To Be Assigned) | Medium |
+| 53146 | On Hold; missing Start/Due Date; Planned Sprint | Security vulnerabilities story estimated but stuck On Hold; risk if not reviewed | Review On Hold status; confirm whether work is deferred or must be re-planned; set schedule | Scrum Master / Engineering Lead (Owner To Be Assigned) | High |
+| 57816 / 57820 | Require Clarification; Story Points and schedule missing | Clarification-needed stories in PI3\\Sprint 4 block planning | Complete clarification and refine acceptance criteria; estimate and assign sprint | Product Owner (Owner To Be Assigned) | High |
+| 75347 | Story Points = 0.0 (potential invalid estimate); schedule missing | Guided MCP setup with zero points may mislead capacity planning | Confirm if 0.0 is intentional; update to realistic Story Points; assign sprint | Product Owner (Owner To Be Assigned) | Medium |
+| 57150 | Risk = "1 - High"; Story Points missing; schedule missing | High-risk playground change unestimated | Add Story Points; plan sprint; align risk with mitigation actions | Product Manager (Owner To Be Assigned) | High |
+| 62832 / 75267 | On Hold; unestimated; no schedule | On Hold backlog items impact long-term planning | Evaluate whether to cancel, defer, or re-activate; estimate if retained | Product Manager (Owner To Be Assigned) | Medium |
+| All Stories with Iteration Path but no Story Points | Missing estimates | Cannot calculate sprint capacity/Say-Do; undercuts PI predictability | Bulk estimation pass for active/groomed stories; enforce Story Points before sprint commitment | Product Owner + Scrum Master (Owner To Be Assigned) | High |
+
+## 4.4 User Story Delivery Assessment
+
+### 4.4.1 Grouping by Iteration Path (Current State)
+
+Examples (not exhaustive):
+
+- **AAVA\\PI3\\Sprint 1–4**: Many sprint-labeled stories; most missing Story Points, some resolved or Dev-Deployed.
+- **AAVA\\PI4\\Sprint 1–6**: Mix of New, Active, Dev-Deployed, Resolved; Story Points present for some MCP onboarding and LLM model configuration stories.
+- **AAVA (root)**: Large backlog of New and In Progress stories without sprint assignment.
+
+**Important rule**: Planned Sprint is not treated as interchangeable with Iteration Path. Both must be populated consistently.
+
+### 4.4.2 Known Story Points by Sprint (Current-State Approximation)
+
+This is **not historical Say-Do**, only current assignment.
+
+```mermaid
+xychart
+  title "Current Known Story Points by Iteration Path (selected)"
+  xAxis [PI3\\Sprint 2, PI3\\Sprint 3, PI3\\Sprint 4, PI4\\Sprint 1, PI4\\Sprint 2, PI4\\Sprint 3, PI4\\Sprint 4, PI4\\Sprint 5]
+  yAxis "Story Points" 0 --> 80
+  bar "Known Points (assigned)" [~17, ~7, ~12, ~12, ~70, ~0, ~80, ~5]
+```
+
+(Values are approximations from the listed stories; not used for official metrics.)
+
+### 4.4.3 User Story State Distribution Chart
+
+```mermaid
+xychart
+  title "User Story State Distribution"
+  xAxis [New, Active, In Progress, Dev-Deployed, Ready for QA, Resolved, On Hold, Groomed, Planned, Ready for Dev, Require Clarification, Ready for Validation, Ready for Design]
+  yAxis "Count" 0 --> 180
+  bar "Stories" [~100+, ~20, ~5, ~10, ~10, ~20, ~6, ~4, ~2, ~3, ~2, ~2, ~3]
+```
+
+### 4.5 User Story Management Interpretation
+
+- The Integrations team has a **large backlog with reasonable prioritization** but **poor estimation coverage**.
+- Sprint-level measurement (capacity, velocity, Say-Do) is blocked by missing Story Points and inconsistent Planned Sprint usage.
+- Immediate focus should be:
+  - Estimating active and groomed stories.
+  - Confirming sprint assignments for near-term deliveries.
+  - Reviewing On Hold and Require Clarification stories.
 
 ---
 
-## 7. Sprint-wise Workload Analysis
+# 5. Sprint-wise Say-Do and Trend Analysis
 
-We use:
+## 5.1 Say-Do Formula (Defined)
 
-- `iterationPath` as actual Azure DevOps iteration (where the work item currently resides).
-- `plannedSprint` as intended sprint assignment (may differ or be null).
+- **Primary**:  
+  `Say-Do Ratio (%) = (Work Completed / Work Committed) × 100`  
+  Example: Committed = 50 Story Points, Completed = 45 Story Points → Say-Do = (45/50) × 100 = **90%**
 
-### 7.1 Grouping by Iteration Path (Actual)
+- **Inverse (if required)**:  
+  `Commitment-to-Completion Ratio (%) = (Work Committed / Work Completed) × 100`  
+  For the example, = (50/45) × 100 ≈ **111.1%** (not labeled as 90%).
 
-Representative iteration-level view (for brevity; full breakdown involves all distinct iteration paths in the JSON):
+## 5.2 Measurement Rules Applied to JSON
 
-| Sprint / Iteration Path        | Total Stories | Estimated Stories | Unestimated Stories | Total Known Story Points | Completed Stories (Resolved + Dev-Deployed) | In-Progress / Active | On-Hold Stories |
-|--------------------------------|---------------|-------------------|---------------------|--------------------------|---------------------------------------------|----------------------|-----------------|
-| AAVA\\PI3\\Sprint 1           | 1             | 1                 | 0                   | 3.0                      | 0                                           | 0 Active             | 1               |
-| AAVA\\PI3\\Sprint 2           | ~8            | 7                 | 1                   | ~27.0                    | 0 Resolved/Dev-Deployed                     | Several Active/Re-Opened | 0             |
-| AAVA\\PI3\\Sprint 3           | ~4            | 0                 | 4                   | 0.0                      | 0                                           | Multiple Active      | 0               |
-| AAVA\\PI3\\Sprint 4           | ~25+          | 8+                | >15                 | ~40+                     | Some Dev-Deployed, Resolved                 | Many Active/New      | On Hold items (e.g., 58014) |
-| AAVA\\PI4\\Sprint 1           | ~10+          | 6+                | 4+                  | ~30+                     | Several Dev-Deployed                        | Active/New/Re-Opened | 0               |
-| AAVA\\PI4\\Sprint 2           | ~25+          | 16+               | 9+                  | ~160+                    | Some Resolved, Dev-Deployed                 | Active, Dev In Progress | On Hold items (75329) |
-| AAVA\\PI4\\Sprint 3           | ~5+           | 0                 | 5+                  | 0.0                      | Some Dev-Deployed                           | Active/In Progress   | 0               |
-| AAVA\\PI4\\Sprint 4           | ~15+          | 14+               | 1+                  | ~118+                    | Multiple Resolved                           | Dev In Progress/Active | On Hold (75329) |
-| AAVA\\PI4\\Sprint 5           | ~6+           | 0                 | 6+                  | 0.0                      | 0 Resolved on user stories (states are New/Ready for QA) | New/Ready for QA | 0 |
-| AAVA\\PI4\\Sprint 6           | ~6+           | 0                 | 6+                  | 0.0                      | 0                                           | All New             | 0               |
-| AAVA (root, no sprint)        | Many          | Some estimated    | Many unestimated    | ~30+                     | Some Resolved                               | Mostly New          | On Hold items   |
-| AAVA\\Release_2026.2.0        | 1             | 0                 | 1                   | 0.0                      | 0                                           | On Hold             | 1               |
+To calculate sprint-level Say-Do, we need:
 
-*(Numbers marked with ~ are approximations from manual aggregation; all calculations are strictly based on the JSON but summarized here to avoid listing 180 rows again.)*
+1. Sprint identity and dates.
+2. Sprint-start committed work membership.
+3. Estimates frozen at sprint start.
+4. Work items completed within that sprint.
+5. Completion timestamps or state changes.
+6. Scope changes across the sprint (add/remove).
+7. Parent-child relationships and roll-up rules.
 
-### 7.2 Grouping by Planned Sprint (Intended)
+**Current JSON does not include**:
 
-Planned Sprint values:
+- Sprint backlog commitment snapshots.
+- Per-sprint completion timestamps beyond current Due Date (which may not equal completion).
+- Any explicit mark of "completed in sprint X" vs "completed before/after".
 
-- `Sprint 1`, `Sprint 2`, `Sprint 3`, `Sprint 4`, `Sprint 5`, `Sprint 6` and `Not Provided`.
+Therefore, historical Say-Do cannot be calculated from this data.
 
-Example workload by Planned Sprint:
+## 5.3 Sprint Performance Table
 
-| Planned Sprint | Total Stories | Estimated Stories | Unestimated Stories | Total Known Story Points | Completed-like (Resolved/Dev-Deployed) | In-Progress/Active | On Hold |
-|----------------|---------------|-------------------|---------------------|--------------------------|----------------------------------------|--------------------|---------|
-| Sprint 1       | ~10           | 7                 | 3                   | ~49.0                    | Several resolved/Dev-Deployed          | Active/New         | On Hold (e.g. 54359) |
-| Sprint 2       | ~2–3          | 0                 | 2–3                 | 0.0                      | 0                                      | New                | 0       |
-| Sprint 3       | ~4            | 2                 | 2                   | ~20.0                    | 0                                      | New/Re-Opened      | 0       |
-| Sprint 4       | ~3–4          | 3                 | 1                   | ~19.0                    | 0                                      | New                | 0       |
-| Sprint 5       | 0             | 0                 | 0                   | 0.0                      | 0                                      | 0                  | 0       |
-| Sprint 6       | 1             | 0                 | 1                   | 0.0                      | 0                                      | New                | 0       |
-| Not Provided   | 166           | 30+               | 130+                | ~214.0+                  | Many resolved/Dev-Deployed             | All states         | Includes On Hold and Re-Opened |
+| Sprint | Work Item Type | Measurement Unit | Committed | Completed | Say-Do % | Status | Missing Evidence |
+|---|---|---|---|---|---|---|---|
+| AAVA\\PI3\\Sprint 1–4 | User Story | Story Points | Not Available | Not Available | Not Calculable | Insufficient Data | No sprint-start commitment snapshot; no sprint-level completion log; Story Points missing for many stories |
+| AAVA\\PI4\\Sprint 1–6 | User Story | Story Points | Not Available | Not Available | Not Calculable | Insufficient Data | Same as above; plus inconsistent Planned Sprint usage |
+| AAVA\\PI3 / PI4 | Feature | Feature Effort | Not Available | Not Available | Not Calculable | Insufficient Data | No committed Feature set per sprint; Feature Effort not linked to sprint history; no completion timestamps |
+| AAVA\\PI3 / PI4 | Epic | Epic Effort | Not Available | Not Available | Not Calculable | Insufficient Data | No Epic Effort; no sprint-level commitment or completion evidence |
 
-### 7.3 Assignment Discrepancies
+We explicitly distinguish:
 
-Because `plannedSprint` is largely empty (92.22% missing), many stories:
+- **Not Available**: historical snapshots not supplied by extraction.
+- **Not Calculable**: due to zero or missing committed/complete values.
 
-- **Have an iterationPath** (they are in a PI or sprint), but
-- **Have no Planned Sprint** (intended sprint not tracked).
+## 5.4 Sprint-on-Sprint Trend
 
-This makes it difficult to:
+| Sprint | Story Say-Do % | Feature Say-Do % | Epic Say-Do % | Trend / Interpretation |
+|---|---|---|---|---|
+| AAVA\\PI3\\Sprint 1 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI3\\Sprint 2 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI3\\Sprint 3 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI3\\Sprint 4 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI4\\Sprint 1 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI4\\Sprint 2 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI4\\Sprint 3 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI4\\Sprint 4 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI4\\Sprint 5 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
+| AAVA\\PI4\\Sprint 6 | Not Calculable | Not Calculable | Not Calculable | Insufficient Data |
 
-- Distinguish items that were moved into a sprint opportunistically versus those truly committed at planning.
-- Compare planned vs actual sprint membership for Say-Do or for planning hygiene.
+No valid Say-Do values exist; a trend cannot be claimed.
 
----
+```mermaid
+xychart
+  title "Historical Say-Do by Sprint (Not Available)"
+  xAxis [PI3-S1, PI3-S2, PI3-S3, PI3-S4, PI4-S1, PI4-S2, PI4-S3, PI4-S4, PI4-S5, PI4-S6]
+  yAxis "Say-Do %" 0 --> 120
+  bar "Story Say-Do" [null, null, null, null, null, null, null, null, null, null]
+```
 
-## 8. Say-Do Ratio (Commitment vs. Delivery)
+(No data points plotted to avoid misleading graph.)
 
-### 8.1 Data Availability Check
+## 5.5 Alternative Current-State Metric (Optional)
 
-For official Say-Do Ratio per instructions, required data:
+Mainly for awareness (not official Say-Do):
 
-- Work Committed at sprint start (Story Points)
-- Work Completed within sprint (Story Points of stories completed by sprint end)
-- Sprint start/end dates
-- Completion dates per story
+**Current Completion Percentage — Not Historical Say-Do**  
+For each sprint, we could compute:
 
-Current JSON:
+`Current Completion % = (Known Points of Currently Completed Stories / Total Known Points of Currently Assigned Stories) × 100`
 
-- Provides Story Points and current `state`.
-- Provides `iterationPath`.
-- Provides `startDate` and `dueDate` per story, but these are not confirmed as completion dates or sprint boundaries.
-- Does **not** declare historical commitment (what was in the sprint at start).
-- Does **not** declare actual completion date vs sprint end.
+However, this JSON does not provide sprint-level membership vs current assignment clearly, nor completion timestamps. Calculating even this alternative metric reliably would require:
 
-Therefore:
+- Clear assignment of each story to a sprint backlog (beyond Iteration Path).
+- Completion state mapping per sprint.
 
-- **Official Say-Do Ratio cannot be calculated** from this dataset.
-
-### 8.2 Sprint Performance Table (Say-Do and Current Completion)
-
-We mark Say-Do Ratio as **Insufficient Data** and compute only:
-
-- **Current Completion %** per actual iterationPath based on:
-
-  - Numerator: Story Points of currently `Resolved` or `Dev-Deployed` stories in the iteration.
-  - Denominator: Story Points of all stories in the iteration with Story Points populated.
-
-This is **not** a historical commitment metric, only a current snapshot.
-
-Representative sprint performance table:
-
-| Sprint / Iteration Path | Committed Story Points (Historical) | Completed Story Points (Historical) | Say-Do Ratio (%) | Current Completion % | Data Availability |
-|-------------------------|-------------------------------------|-------------------------------------|-------------------|----------------------|-------------------|
-| AAVA\\PI3\\Sprint 4    | Not Available                       | Not Available                       | Insufficient Data | ~40–50% (approx.)    | Partial (states + points only) |
-| AAVA\\PI4\\Sprint 1    | Not Available                       | Not Available                       | Insufficient Data | ~60–70% (approx.)    | Partial           |
-| AAVA\\PI4\\Sprint 2    | Not Available                       | Not Available                       | Insufficient Data | ~30–40% (approx.)    | Partial           |
-| AAVA\\PI4\\Sprint 3    | Not Available                       | Not Available                       | Insufficient Data | ~50–60% (approx.)    | Partial           |
-| AAVA\\PI4\\Sprint 4    | Not Available                       | Not Available                       | Insufficient Data | ~50–60% (approx.)    | Partial           |
-| All other iterations    | Not Available                       | Not Available                       | Insufficient Data | Not Determinable     | Partial / Low     |
-
-> **Note:** Percentages are approximate from visible totals and must be treated only as indicative of current completion, not as Say-Do Ratio. Precise values would require explicit sums per iteration; the data is available but not historically contextualized to commitments.
+Given those are not fully verifiable here, this metric is **not reported** to avoid misinterpretation.
 
 ---
 
-## 9. Sprint-on-Sprint Performance Trend
+# 6. Say-Do Data Gaps and Calculation Blockers
 
-Because every sprint’s Say-Do Ratio is **Insufficient Data**, we cannot:
+## 6.1 Say-Do Blockers Table
 
-- Compute a trend across completed sprints.
-- Compare ratios over time to classify as Improving, Declining, Flat, or Fluctuating.
+| Sprint | Type | Work Item ID | Missing Evidence | Why Say-Do Is Blocked | Required Correction | Suggested Owner |
+|---|---|---|---|---|---|---|
+| AAVA\\PI3\\Sprint 4 | User Story | Multiple (e.g., 70433, 70450, 70431, 53369, 69441) | No sprint-start commitment snapshot; Story Points missing; completion timestamps not available | Cannot determine committed vs completed story scope or points for the sprint | Implement sprint backlog snapshot collection; ensure Story Points estimated before sprint start; extract completion timestamps from ADO | Scrum Master + Azure DevOps Administrator (Owner To Be Assigned) |
+| AAVA\\PI4\\Sprint 2 | User Story | Multiple (e.g., 93164, 36969, 75325, 93754, 93755, 94022–94038, 75330, 75333, 94040, etc.) | Commitment snapshot not available; partial Story Points; no completion log per sprint | Same as above; high-impact MCP onboarding work untrackable | Configure analytics to capture sprint commitment set; enforce estimation standards; pull state-change history | Delivery Manager + Scrum Master (Owner To Be Assigned) |
+| AAVA\\PI4\\Sprint 4 | Feature | 51778, 75327, 75328, 75332, 94041, 116803 | No Feature-level commitment or completion timestamps; Feature Effort not tied to sprint events | Cannot compute Feature Effort-based Say-Do per sprint | Define Feature-level measurement approach; store sprint commitments and completions; extract completion timestamps | Product Manager + Azure DevOps Administrator (Owner To Be Assigned) |
+| AAVA\\PI3 / PI4 | Epic | 51718, 51736, 70804, 70807 | Epic Effort missing; no sprint commitments or completion logs; hierarchy unverified | Epic Say-Do cannot be derived from descendants or Epic metadata | Populate Epic Effort; validate Epic–Feature–Story hierarchy; implement roll-up rules and historical snapshots | Product Manager (Owner To Be Assigned) |
+| All Sprints | All Types | N/A (system-wide) | Historical evidence not extracted; ADO field mapping for commitment history missing | The extraction tool only returns current fields, not historical snapshots | Extend extraction to include sprint membership history, state change timelines, and estimate-change tracking | Azure DevOps Administrator (Owner To Be Assigned) |
 
-### Trend Table
+Distinctions:
 
-| Sprint / Iteration Path | Say-Do Ratio (%) | Change from Previous Sprint | Performance Trend |
-|-------------------------|------------------|-----------------------------|-------------------|
-| AAVA\\PI3\\Sprint 4    | Insufficient Data | Not Applicable              | Insufficient Data |
-| AAVA\\PI4\\Sprint 1    | Insufficient Data | Not Applicable              | Insufficient Data |
-| AAVA\\PI4\\Sprint 2    | Insufficient Data | Not Applicable              | Insufficient Data |
-| AAVA\\PI4\\Sprint 3    | Insufficient Data | Not Applicable              | Insufficient Data |
-| AAVA\\PI4\\Sprint 4    | Insufficient Data | Not Applicable              | Insufficient Data |
-| Others                  | Insufficient Data | Not Applicable              | Insufficient Data |
+- **ADO field is empty**: e.g., Story Points = null.
+- **ADO field is unmapped**: e.g., Feature Primary User Cohort (field exists but not mapped into JSON).
+- **Historical evidence was not extracted**: sprint commitment and completion data is not present.
+- **Sprint metadata is unavailable**: no explicit start/end date per sprint in JSON.
+- **Hierarchy or attribution unverified**: no explicit parent-child relationships in JSON.
 
-**Overall trend classification:** **Insufficient Data**.
-
-To establish a trend, at least two completed sprints with valid Say-Do Ratios are needed.
-
----
-
-## 10. Schedule and Overdue Work Analysis
-
-We use:
-
-- `startDate`, `dueDate`, and `state`.
-- Current report date: **not provided** in JSON; therefore we cannot calculate precise days overdue.  
-  We treat past `dueDate` values as potentially overdue for non-completed items, but **do not** assert they were completed late.
-
-### 10.1 Identified Patterns
-
-- Several non-completed stories have due dates in the past (relative to their own timestamp, but without a current date we cannot calculate “Days Overdue” precisely).
-- Many stories lack both `startDate` and `dueDate`, especially in New, Active, and In Progress states.
-
-### 10.2 Representative Schedule Table
-
-| User Story ID | Title | State | Start Date | Due Date | Days Overdue | Schedule Status | Recommended Action |
-|---------------|-------|-------|-----------|----------|--------------|-----------------|--------------------|
-| 57750 | UI -Build Agent Version History | Re-Opened | Not Provided | 2026-08-10T00:00:00Z | Not Calculable (no current date) | Due date in past; work reopened | Re-evaluate scope and schedule, adjust due date or sprint assignment. |
-| 65153 | API- Restore Agent to Previous Version from Version History | Re-Opened | Not Provided | 2026-08-14T00:00:00Z | Not Calculable | Due date in past; story reopened | Confirm whether due date still applies, re-plan in upcoming sprint. |
-| 73869 | Executor (Execute-Only Role): Invoke Agent... | Re-Opened | Not Provided | 2026-08-18T00:00:00Z | Not Calculable | Potential schedule slip | Align with PI4 objectives and update due date or completion expectation. |
-| 81732 | API: LLM Model - Details Page - Functionality | Planned | Not Provided | 2026-08-25T00:00:00Z | Not Calculable | Upcoming or past due (based on context) | Confirm development timeline and adjust sprint scope. |
-| 81826 | API: Add LLM Model: Level Access Step | Active | Not Provided | 2026-08-28T00:00:00Z | Not Calculable | Approaching or past due | Finish work or renegotiate deadlines. |
-| 69441 | Discover: Add MCP Search Functionality | Ready for QA | 2026-07-27T00:00:00Z | 2026-07-28T10:39:00Z | Not Calculable | QA likely pending; due date in past | Ensure QA completion and transition to deployment. |
-| 73732 | UX: MCP server registration flow... | Ready for Validation | Not Provided | 2026-10-28T00:00:00Z | Not Calculable | Due date specified; validation pending | Validate UX and move to Dev or QA. |
-| 113707 | Bug Fix 2.1.3.1- KB Read... | Resolved | 2026-10-12T00:00:00Z | 2026-10-13T00:00:00Z | Not Applicable | Completed | No action required; record for historical reference. |
-| 113708 | Bug- Fix - Tool execution... | Resolved | 2026-10-13T00:00:00Z | 2026-10-13T00:00:00Z | Not Applicable | Completed | No action required. |
-| 119390 | Resolve Image Generation Issue for LLM Models | New | Not Provided | 2026-11-04T00:00:00Z | Not Calculable | Scheduled milestone | Estimate and assign to sprint before due date. |
-
-Because actual current date and completion dates are unavailable, we **do not** assert that any completed story was late, nor do we calculate precise overdue days.
+If the JSON cannot establish which work items were committed at sprint start (which is the case here), Say-Do remains **Insufficient Data**.
 
 ---
 
-## 11. Risk and Dependency Analysis
+# 7. Consolidated Management Findings
 
-We analyze:
-
-- `risk`
-- `dependentTeam`
-- `studio`
-- `releaseVersion`
-- `state`
-
-### 11.1 Observations
-
-- **Risk field:** Only one User Story (`57150`) has Risk = "1 - High".
-  - Indicates risk capture is minimal and inconsistent.
-- **Dependent Team:** Only `93164` explicitly references `DevSecOps`; all other stories leave this empty.
-- **Studio:** Several studios are used:
-  - AIG, ACS, ACE, Foundation, plus many with Not Provided.
-  - Work is concentrated in AIG; release planning by studio is possible but incomplete.
-
-### 11.2 Risk & Dependency Table (Representative Items)
-
-| User Story ID | Title | Sprint / Iteration Path | Risk | Dependent Team | State | Potential Impact | Recommended Action |
-|---------------|-------|-------------------------|------|----------------|-------|------------------|--------------------|
-| 57150 | Playground Menu Left nav for conversational with Selection of Models drop down similar to 1.0 | AAVA (root) | 1 - High | Not Provided | New | High-risk UI work with no estimation or sprint assignment; potential impact on user experience and release timeline. | Add Story Points, assign sprint, clarify risk drivers and mitigation plan. |
-| 93164 | Add LLM Models to Dev Environment | AAVA\\PI4\\Sprint 2 | Not Provided | DevSecOps | Active | Dependency on DevSecOps may block environment setup; no sprint or schedule dates recorded. | Coordinate with DevSecOps, clarify dependency scope, set due date and sprint. |
-| 62832 | Enabling - GPT 5.3 codex spark | AAVA\\Release_2026.2.0 | Not Provided | Not Provided | On Hold | On Hold work tied to release iteration; risk of release slippage or scope confusion. | Decide whether to restart or descoped; update state and planning fields. |
-| 75329 | Add MCP Server: Tool Requirements Step | AAVA\\PI4\\Sprint 4 | Not Provided | Not Provided | On Hold | Tool requirements definition blocked; may delay MCP onboarding capabilities. | Resolve On Hold reason; engage PO/architect to unblock. |
-| 75267 | UX: NLP-based Tool Suggestion, Matching, Clone, and Guided Creation | AAVA\\PI4 | Not Provided | Not Provided | On Hold | UX capabilities halted, limiting future user experience and tool discoverability. | Clarify UX scope, align with PI-level UX roadmap, re-activate or descoped. |
-| 53146 | Resolve Security Vulnerabilities Across Backend Services and Dependencies | AAVA\\PI3\\Sprint 1 | Not Provided | Not Provided | On Hold | Security vulnerabilities unresolved; potential production risk. | Prioritize security remediation; add Story Points if work resumes. |
-| 58014 | UX: Tool Lifecycle Status Indicators and Transitions | AAVA\\PI3\\Sprint 4 | Not Provided | Not Provided | On Hold | Lifecycle visibility lacking; may affect governance and user understanding of tool status. | Align with governance and UX teams; re-plan for upcoming PI. |
-
-> Empty Risk and Dependent Team fields do **not** mean a story is risk-free or dependency-free; they only indicate these aspects are not captured in planning data.
+| Severity | Finding | Affected Type | Affected IDs | Evidence | Business Impact |
+|---|---|---|---|---|---|
+| High | Widespread missing estimates (Story Points, Feature Effort, Epic Effort) | Epic, Feature, User Story | Epics: 51718, 51736, 70804, 70807; Features with Effort null e.g., 53397, 58004, 58566, 51747, 51928–51933, 51935, 65074, 72353, 72436, 114968, 121855; Stories with Story Points null (majority) | JSON shows Effort/storyPoints = null for many items | Planning accuracy and capacity forecasting are impaired; Say-Do calculation is blocked |
+| High | Missing sprint assignment (Planned Sprint) for many backlog items | Feature, User Story | Features with plannedSprint null (e.g., 58004, 51778, 58566, 51928–51933, 65074, 72353, 72436, 114968, 121855); Stories with plannedSprint null (majority) | plannedSprint field is null for many items, even when iterationPath exists | Difficult to align backlog items with specific sprints; reduces planning discipline and predictability |
+| High | No historical commitment/completion data for sprints | Epic, Feature, User Story | All items | JSON includes current fields only; no snapshots or completion timestamps | Official Say-Do reporting is not possible; management cannot track delivery reliability sprint-on-sprint |
+| Medium | Incomplete release information | Feature, User Story | Features with releaseVersion null (e.g., 51771–51722, 51733, 51735, 51769, 51772–51780, 51784, 51790, 51928–51933, 65074, 72353, 114968, 121855); Stories with releaseVersion null (many) | releaseVersion null for numerous items | Release coordination and cross-team dependency management are at risk |
+| Medium | On Hold / Require Clarification items unreviewed | User Story | On Hold: 53146, 58014, 62832, 75267, 75329; Require Clarification: 57816, 57820 | State indicates On Hold / Require Clarification; no schedule or updated plan | Potential hidden backlog risk; unresolved items may affect security, lifecycle management, and user experience |
+| Medium | Unmapped Primary User Cohort field for all Features | Feature | All Feature IDs (53397, 58004, …, 121855) | `unmappedPlanningFields: ["Primary User Cohort"]` | Cannot easily tie Features to user cohorts; reduces ability to plan user-impactful increments |
 
 ---
 
-## 12. Priority, Studio and Release Planning Analysis
+# 8. Corrective Action and Accountability Register
 
-### 12.1 Priority Distribution
-
-Priorities observed: 1, 2, 3.
-
-Approximate counts:
-
-- **Priority 1:** Small subset (e.g., 104421, 53401, 55030, 55035, 55076, 57150, 123815).
-- **Priority 2:** Majority of stories (well over 150).
-- **Priority 3:** Few stories (e.g., 63449, 57150).
-
-High-priority stories:
-
-- Some Priority 1 stories have:
-  - Missing Story Points (e.g., 55030, 55035, 55076, 57150, 123815).
-  - No Planned Sprint.
-  - New or Re-Opened states.
-
-These represent planning gaps for critical work.
-
-### 12.2 Studio Distribution
-
-Studios used:
-
-- AIG (majority of stories)
-- ACS (e.g., 72436, 83476)
-- ACE (e.g., 63449)
-- Foundation (e.g., 65602)
-- Many stories have `studio` = Not Provided.
-
-Implications:
-
-- Most work is associated with AIG, but the missing `studio` on many stories hampers cross-studio workload analysis.
-- ACS and Foundation stories are relatively few but may represent specialized work (security, infrastructure).
-
-### 12.3 Release Version Distribution
-
-Release versions observed:
-
-- 2.2.1.0 (e.g., many PI3/PI4 AIG stories)
-- 2.3.0.1
-- 2.3.1.0
-- 2.3.2.0
-- Many stories with `releaseVersion` = Not Provided.
-
-Key points:
-
-- Many user stories have no Release Version set, even though they reside in PI iterations related to specific releases.
-- Features carry more release version information than user stories; this disconnect may complicate release-centric reporting.
-
-Examples:
-
-- `57150` (Playground menu) has releaseVersion = 2.3.2.0 but no sprint or story points.
-- Several MCP onboarding stories (75326, 75328, 75332, 94041, 116803) have releaseVersion = 2.3.0.1.
+| Priority | Work Item Type | Work Item ID / Sprint | Required Correction | Suggested Owner | Suggested Timeframe | Verification Criteria |
+|---|---|---|---|---|---|---|
+| High | User Story | All active/groomed stories with Story Points = null (e.g., 93164, 70433, 70450, 57816, 57820, 69441, many PI4 sprint items) | Estimate Story Points before next sprint commitment; ensure each story in upcoming sprints has Story Points > 0 | Product Owner (Owner To Be Assigned) | Before next sprint planning | ADO Story Points field populated and > 0 for all stories in planned sprints |
+| High | Feature | 53397, 58004, 58566, 51747, 51928–51933, 65074, 72353, 72436, 114968, 121855 | Populate Feature Effort and minimal schedule (Start/Target Date) for active/near-term Features | Product Manager (Owner To Be Assigned) | Within current PI | Effort field non-null; Target Date set; Start Date set for near-term Features |
+| High | Epic | 51718, 51736, 70804, 70807 | Define Epic Effort, Start Date, Target Date, and Business Value/Time Criticality | Product Manager (Owner To Be Assigned) | Within 2 sprints | Epic Effort non-null; Start/Target Dates set; Business Value and Time Criticality populated |
+| High | All Types | All PI3/PI4 Sprints | Implement sprint commitment snapshot extraction (ADO queries or analytics pipeline) | Azure DevOps Administrator (Owner To Be Assigned) | Before next PI | Evidence of stored sprint backlog membership at sprint start; retrievable via analytics |
+| High | All Types | All PI3/PI4 Sprints | Extract completion timestamps/state transitions per sprint | Azure DevOps Administrator (Owner To Be Assigned) | Before next PI | Completion events stored per item; ability to query "completed during sprint X" |
+| Medium | Feature | All Features (Primary User Cohort) | Resolve ADO field mapping for Primary User Cohort; decide if this field is mandatory | Azure DevOps Administrator + Product Manager (Owner To Be Assigned) | Within current PI | `unmappedPlanningFields` for Primary User Cohort no longer reported; field visible in analytics |
+| Medium | User Story | On Hold and Require Clarification stories (53146, 58014, 62832, 75267, 75329, 57816, 57820) | Review status; decide to cancel, defer, or groom for upcoming sprints; update state and schedule | Scrum Master + Product Owner (Owner To Be Assigned) | Before next sprint | On Hold / Require Clarification state resolved; either moved to New/Active with Story Points and dates, or closed |
+| Medium | User Story | 75347 | Validate 0.0 Story Points; correct if invalid | Product Owner (Owner To Be Assigned) | Within next sprint | Story Points updated to a realistic non-zero value or confirmed policy on zero-point work |
+| Medium | User Story | 57150 | Estimate Story Points; plan sprint; address high risk | Product Manager (Owner To Be Assigned) | Before next PI | Story Points non-null; Planned Sprint set; risk field used in planning |
+| Medium | All Types | Release-linked items with missing dates (multiple Features and Stories) | Align Target/Due Dates with release plans and sprint assignments | Delivery Manager (Owner To Be Assigned) | Within current release cycle | Each item with releaseVersion has Target/Due Date and Planned Sprint consistent with release schedule |
 
 ---
 
-## 13. Key Findings and Management Insights
+# 9. Final Product Manager Summary
 
-All findings are based strictly on the JSON data and derived calculations.
+- **Epic planning health**: Epics are prioritized but largely **unestimated and unscheduled**. Effort, Business Value, Time Criticality, Start Date, and Target Date must be populated to make Epics useful for roadmap-level planning.
+- **Feature planning health**: Features show **partial planning maturity**. Many have Effort or Target Date, but rarely both, and Business Value/Risk/Time Criticality are consistently missing. Primary User Cohort is unmapped for all Features.
+- **User Story planning health**: The User Story backlog is large but **under-estimated**; most stories lack Story Points and clear sprint assignment. Some high-risk and On Hold items are not actively managed.
+- **Say-Do measurement readiness**: Historical Say-Do is **not calculable** from this JSON. The main blockers are missing sprint commitment snapshots, absence of completion timestamps, and incomplete estimation across all work item types.
+- **Delivery predictability (evidence-based)**: Without historical Say-Do and robust estimation, delivery predictability cannot be quantified. Qualitatively, the team appears to be actively delivering MCP and LLM integration work, but management cannot reliably measure commitment vs completion.
+- **Three highest-priority corrective actions**:
+  1. **Enforce estimation completeness**: Ensure all upcoming sprint candidates (stories and features) have non-null Story Points/Feature Effort.
+  2. **Implement historical data extraction**: Add sprint backlog commitment and completion history to the Azure DevOps analytics pipeline.
+  3. **Align backlog items with sprints and releases**: Populate Planned Sprint and Target/Due Dates consistently for active Epics, Features, and Stories.
+- **What must change before the next sprint planning cycle**:
+  - Estimation hygiene: No story or feature should enter sprint planning without a clear estimate.
+  - Sprint discipline: Planned Sprint and Iteration Path must be used consistently, with clear criteria for committing work.
+  - Data infrastructure: Historical commitment and completion evidence must be captured so that Say-Do and delivery reliability can be measured and reported to leadership.
 
-### Finding 1 — Extensive Unestimated Backlog
+This report can be saved directly as:
 
-- **Description:** Approximately 78.89% of User Stories (142 out of 180) have no Story Points.
-- **Evidence:**
-  - Story Points completeness: 21.11%.
-  - Unestimated stories spread across New, Active, In Progress, Ready for QA, and even Resolved states.
-- **Affected Stories:** 142 (78.89% of backlog).
-- **Potential Impact:**
-  - Inability to perform reliable capacity planning.
-  - Imprecise forecasting and Say-Do ratio measurement.
-  - Risk of over-committing sprints.
-- **Severity:** **High**
-
-### Finding 2 — Planned Sprint Assignment Largely Missing
-
-- **Description:** 92.22% of User Stories lack a Planned Sprint.
-- **Evidence:**
-  - Only 14 of 180 stories have `plannedSprint` populated.
-- **Affected Stories:** 166 (92.22%).
-- **Potential Impact:**
-  - Limited ability to understand intended sprint scope vs current iteration assignments.
-  - Reduced transparency in sprint-level backlog readiness.
-- **Severity:** **High**
-
-### Finding 3 — Schedule Data (Start and Due Dates) Largely Absent
-
-- **Description:** Start Date missing for 94.44% of stories; Due Date missing for 83.33%.
-- **Evidence:**
-  - 10 of 180 stories have `startDate` populated.
-  - 30 of 180 stories have `dueDate` populated.
-- **Affected Stories:** 170 (startDate), 150 (dueDate).
-- **Potential Impact:**
-  - Poor visibility of schedule and deadlines.
-  - Inability to systematically detect overdue work and to track timebox adherence.
-- **Severity:** **High**
-
-### Finding 4 — Risk and Dependency Fields Almost Unused
-
-- **Description:** Risk is populated in 1 story; Dependent Team in 10 stories.
-- **Evidence:**
-  - Risk completeness: 0.56%.
-  - Dependent Team completeness: 5.56%.
-- **Affected Stories:** 179 (Risk missing) and 170 (Dependent Team missing).
-- **Potential Impact:**
-  - Hidden cross-team dependencies and risks.
-  - Limited ability for leadership to proactively manage risk and dependencies.
-- **Severity:** **Medium–High**
-
-### Finding 5 — Large Portion of Backlog Not Ready for Sprint Planning (Planning Data Perspective)
-
-- **Description:** 83.33% of stories classified as Not Ready in planning data terms.
-- **Evidence:**
-  - Ready = 0, Partially Ready ≈ 30 (16.67%), Not Ready = 150 (83.33%), Unable to Assess = 0.
-- **Affected Stories:** 150.
-- **Potential Impact:**
-  - Sprint planning largely dependent on ad-hoc decisions and incomplete data.
-  - Higher probability of mid-sprint scope changes and churning.
-- **Severity:** **High**
-
-### Finding 6 — On Hold and Re-Opened Work Signaling Delivery Risks
-
-- **Description:** 6 On Hold and 8 Re-Opened stories with known Story Points (some).
-- **Evidence:**
-  - On Hold items: e.g., 53146, 58014, 62832, 75329, 75267.
-  - Re-Opened items: e.g., 53401, 58006, 64169, 57750, 65153, 73869, 53398.
-- **Affected Stories:** 14 (7.78%).
-- **Potential Impact:**
-  - Blocked security and governance tasks.
-  - Rework may degrade predictability and cycle time.
-- **Severity:** **Medium**
-
-### Finding 7 — Historical Sprint Commitment Data Missing; Say-Do Ratio Not Computable
-
-- **Description:** No explicit historical commitment data, completion dates, or sprint boundaries in JSON.
-- **Evidence:**
-  - Fields provided: state, iterationPath, Story Points, startDate, dueDate, but no commitment snapshot.
-- **Affected Sprints:** All.
-- **Potential Impact:**
-  - Leadership cannot reliably judge commitment vs delivery performance on a sprint-by-sprint basis.
-- **Severity:** **Medium**
-
----
-
-## 14. Actionable Recommendations
-
-### 14.1 Recommended Actions Table
-
-| Priority | Recommended Action | Supporting Finding | Affected Stories | Suggested Owner | Suggested Timeframe |
-|----------|--------------------|--------------------|------------------|-----------------|---------------------|
-| High | Conduct focused estimation workshops to populate Story Points for all active and near-term backlog items. | Finding 1 – Extensive Unestimated Backlog | ~142 stories | Product Owner, Engineering Lead | Within next 1–2 sprints |
-| High | Enforce capturing `plannedSprint` for all stories targeted for upcoming PI4 Sprints and beyond. | Finding 2 – Planned Sprint Assignment Missing | ~166 stories | Product Owner, Scrum Master | Immediate, next planning session |
-| High | Define and adopt a convention for `startDate` and `dueDate` for release-critical stories and those in active sprints. | Finding 3 – Schedule Data Absent | ~170 (startDate), ~150 (dueDate) | Delivery Manager, Product Owner | Within current PI |
-| Medium–High | Introduce a simple risk classification scheme and capture Risk for high-impact, On Hold, and Re-Opened stories. | Finding 4 – Risk Field Underused | ~179 stories | Product Owner, Engineering Lead | Next 2–3 refinement sessions |
-| Medium–High | Require `dependentTeam` to be populated for any story needing another team (DevSecOps, ACE, Foundation, etc.). | Finding 4 – Dependency Visibility Low | ~170 stories | Scrum Master, Product Owner | Ongoing, starting next sprint |
-| High | Establish a planning data readiness checklist (Story Points, Planned Sprint, priority confirmed) before committing stories into active sprints. | Finding 5 – Backlog Not Ready for Planning | ~150 Not Ready stories | Scrum Master, Product Owner | Immediately |
-| Medium | Review all On Hold and Re-Opened items to either reactivate, re-estimate, or descoped, updating states and planning fields. | Finding 6 – On Hold/Re-Opened Work | 14 stories | Engineering Lead, Product Owner | Within current PI |
-| Medium | Align user stories with release versions consistently (especially where features already have releaseVersion) to improve release planning. | Release Planning Gaps | ~166 stories missing releaseVersion | Product Owner, Delivery Manager | Before next PI planning |
-| Medium | Implement a process to snapshot sprint commitments (stories + Story Points) at sprint start and completion dates at sprint end for Say-Do calculation. | Finding 7 – Say-Do Ratio Data Missing | All sprints | Scrum Master, Delivery Manager | Over next 2–3 sprints |
-| Low–Medium | Clarify use of `uxExpected` and populate for UX-led stories to coordinate design timelines. | Missing UX Expected Dates | 179 stories | UX Lead, Product Owner | As part of UX planning cadence |
-
----
-
-## 15. Overall Conclusion
-
-### 15.1 Backlog Planning Health
-
-- **Overall planning data completeness:** ~29.28% across key fields is low for a team operating multiple PI sprints.
-- **Estimation and sprint assignment gaps** are the primary contributors to poor planning health.
-- Priority is consistently populated, but used without adequate coupling to Story Points or planned sprint scheduling.
-
-### 15.2 Most Significant Planning Gaps
-
-- Missing Story Points and Planned Sprint information on the majority of stories.
-- Sparse scheduling data (start and due dates).
-- Underuse of Risk and Dependent Team fields, hiding important coordination and risk management signals.
-
-### 15.3 Sprint Readiness Assessment
-
-- From a planning data perspective, **0% of stories are fully Ready**, and more than **80% are Not Ready**.
-- Sprint planning is currently constrained by insufficient data rather than only by capacity.
-- PI4 sprints show active and resolved work but lack a complete, data-driven view of what was intentionally planned and committed.
-
-### 15.4 Delivery Predictability Assessment
-
-- On Hold and Re-Opened items indicate rework and potential delays.
-- Incomplete estimation and missing sprint assignment severely limit the ability to measure or improve delivery predictability.
-- Without historical commitment and completion tracking, leadership must rely on anecdote or partial indicators.
-
-### 15.5 Say-Do Ratio Availability and Performance Trend
-
-- **Official Say-Do Ratio:** **Insufficient Data** for all sprints; required historical data is missing.
-- **Sprint-on-sprint trend:** **Insufficient Data**; cannot classify performance trend.
-- Available current-state metrics (Resolved and Dev-Deployed Story Points) can show progress but not commitment alignment.
-
-### 15.6 Immediate Corrective Actions
-
-- Complete backlog estimation and Planned Sprint assignments for PI4 and upcoming sprints.
-- Introduce and enforce a planning readiness checklist at sprint planning.
-- Review and resolve On Hold and Re-Opened stories to reduce work churn and unblock critical pathways.
-- Start capturing minimal historical metrics for each sprint (commitment snapshot, completion dates).
-
-### 15.7 Longer-Term Process Improvements
-
-- Establish a standardized data model for User Story planning fields and ensure consistent usage across teams (Story Points, Sprint, Start/Due Dates, Risk, Dependencies, Release).
-- Integrate planning data quality checks into tooling (Azure DevOps dashboards) to flag missing critical fields before sprint start.
-- Use improved data to introduce Say-Do Ratio tracking, velocity, and predictable roadmap forecasting at PI and release levels.
-- Encourage cross-team alignment by using `studio` and `dependentTeam` fields to drive multi-team planning and coordination.
-
-Overall, the Integrations team’s Azure DevOps User Story data provides a good foundation of backlog structure but requires significant planning data improvements—particularly around estimation, sprint assignment, and risk/dependency capture—to support reliable sprint planning, delivery predictability, and executive-level reporting.
+**`Azure_DevOps_Planning_and_Sprint_Performance_Report.md`**
